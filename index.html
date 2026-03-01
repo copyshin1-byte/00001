@@ -6,151 +6,186 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>製品一覧</title>
+<title>CYBER PRODUCT LIST</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
 
-*{box-sizing:border-box;}
+*{
+box-sizing:border-box;
+}
 
 body{
 margin:0;
-font-family:"Noto Sans JP";
-color:#e5e7eb;
-background:#020617;
+font-family:'Orbitron',sans-serif;
+color:#00ffff;
+
+background:
+radial-gradient(circle at 20% 20%,#001122,#000000),
+linear-gradient(#000000,#020220);
 }
 
+
+/* 上部バー */
+
 .header{
+
 position:fixed;
 top:0;
 left:0;
 right:0;
+
 height:60px;
+
 display:flex;
 align-items:center;
 justify-content:center;
-background:#020617;
-border-bottom:1px solid #333;
+
+background:#000;
+
+border-bottom:2px solid #00ffff;
+
+box-shadow:0 0 20px #00ffff;
+
 z-index:100;
+
 }
 
 .logoText{
-font-size:18px;
+
+font-size:22px;
+
+letter-spacing:3px;
+
+text-shadow:0 0 10px #00ffff;
+
 }
 
+
+/* メイン */
+
 .container{
+
 max-width:1200px;
-margin:70px auto 0;
+
+margin:80px auto;
+
 padding:10px;
-display:flex;
-gap:16px;
+
 }
 
-.panel{
-background:#030712;
+
+/* カテゴリ */
+
+.categoryTitle{
+
+font-size:24px;
+
+margin-top:40px;
+
+color:#ff00ff;
+
+text-shadow:0 0 10px #ff00ff;
+
+}
+
+
+/* 商品カード */
+
+.productCard{
+
+background:#000;
+
+border:1px solid #00ffff;
+
 border-radius:12px;
+
 padding:12px;
-display:flex;
-flex-direction:column;
-border:1px solid #222;
+
+margin:10px;
+
+box-shadow:
+0 0 10px #00ffff,
+inset 0 0 10px #00ffff;
+
+transition:.3s;
+
 }
 
-.categories{width:250px;}
-.products{width:420px;}
-.detail{flex:1;}
 
-.categoryBtn{
-padding:10px;
-margin:6px 0;
-background:#020617;
-border-radius:10px;
-cursor:pointer;
-text-align:center;
+.productCard:hover{
+
+transform:scale(1.03);
+
+box-shadow:
+0 0 30px #ff00ff,
+inset 0 0 20px #ff00ff;
+
 }
 
-.categoryIcon{
-width:70px;
-height:70px;
-border-radius:12px;
-object-fit:cover;
-margin-bottom:6px;
-}
 
-.card{
-display:flex;
-gap:12px;
-padding:12px;
-margin-bottom:10px;
-background:#020617;
-border-radius:10px;
-cursor:pointer;
-align-items:center;
-}
+/* 商品画像 */
 
-.card img{
-width:70px;
-height:70px;
-object-fit:cover;
+.productImage{
+
+width:100%;
+
 border-radius:8px;
+
+border:1px solid #00ffff;
+
 }
 
-#productDetail{
-white-space:pre-wrap;
-line-height:1.7;
-word-break:break-word;
-}
 
-.modal{
-position:fixed;
-top:0;
-left:0;
+/* 動画 */
+
+.productVideo{
+
 width:100%;
-height:100%;
-background:#020617;
-overflow:auto;
-padding:20px;
-display:none;
-z-index:1000;
+
+border-radius:8px;
+
+border:1px solid #00ffff;
+
 }
 
-@media(max-width:700px){
 
-.container{
-flex-direction:column;
-margin-top:65px;
+/* 商品名 */
+
+.productName{
+
+font-size:18px;
+
+margin-top:8px;
+
+color:#00ffff;
+
 }
 
-.categories{
-width:100%;
+
+/* 説明 */
+
+.productDescription{
+
+font-size:14px;
+
+color:#bbbbbb;
+
 }
 
-.panel.categories{
-width:100%;
-}
 
-.detail{
-display:none;
-}
+/* グリッド */
 
-#categoryList{
-display:flex;
-gap:14px;
-overflow-x:auto;
-padding-bottom:6px;
-}
+.grid{
 
-#categoryList::-webkit-scrollbar{
-display:none;
-}
+display:grid;
 
-.categoryBtn{
-min-width:90px;
-display:flex;
-flex-direction:column;
-align-items:center;
-white-space:nowrap;
-}
+grid-template-columns:
+
+repeat(auto-fill,minmax(220px,1fr));
+
+gap:10px;
 
 }
 
@@ -160,301 +195,187 @@ white-space:nowrap;
 
 <body>
 
+
 <div class="header">
+
 <div class="logoText">
- PRODUCT LIST
-</div>
-</div>
 
-<div class="container">
-
-<div class="panel categories">
-<h3>Contents</h3>
-<div id="categoryList"></div>
-</div>
-
-<div class="panel products">
-
-<h3>product</h3>
-
-<input id="searchBox"
-placeholder="商品検索"
-oninput="searchAll()">
-
-<div id="productList"></div>
-
-</div>
-
-<div class="panel detail">
-
-<h3>説明</h3>
-
-<div id="productDetail">
-製品を選択してください
-</div>
+CYBER PRODUCT LIST
 
 </div>
 
 </div>
 
-<div id="mobileModal" class="modal"></div>
+
+<div class="container" id="app">
+
+Loading...
+
+</div>
+
 
 <script type="module">
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { initializeApp } from
+"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+
+import {
+
+getFirestore,
+collection,
+getDocs
+
+} from
+"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+
+/* Firebase設定（そのまま） */
 
 const firebaseConfig={
-apiKey: "AIzaSyDDhUgvH7o4SymhG3QVTRe6CDAlJM_Vk_A",
-  authDomain: "project-3088108151926999605.firebaseapp.com",
-  projectId: "project-3088108151926999605",
-  storageBucket: "project-3088108151926999605.firebasestorage.app",
-  messagingSenderId: "331871777494",
-  appId: "1:331871777494:web:8de28a405de387f7240f77"};
+
+apiKey:"YOUR_API_KEY",
+
+authDomain:"YOUR_PROJECT.firebaseapp.com",
+
+projectId:"YOUR_PROJECT",
+
+storageBucket:"YOUR_PROJECT.appspot.com",
+
+messagingSenderId:"XXXX",
+
+appId:"XXXX"
+
+};
+
 
 const app=initializeApp(firebaseConfig);
+
 const db=getFirestore(app);
 
+
+
+const appDiv=document.getElementById("app");
+
+
+async function load(){
+
+const categoriesSnap=
+await getDocs(collection(db,"categories"));
+
+const productsSnap=
+await getDocs(collection(db,"products"));
+
+
 let categories=[];
-let products=[];
-let currentCategory=null;
 
+categoriesSnap.forEach(d=>{
 
-function getYoutubeID(url){
-
-if(!url)return null;
-
-if(url.includes("watch?v="))
-return url.split("watch?v=")[1].split("&")[0];
-
-if(url.includes("youtu.be/"))
-return url.split("youtu.be/")[1].split("?")[0];
-
-return null;
-
-}
-
-function convertYoutube(text){
-
-if(!text)return "";
-
-const regex=/https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/[^\s]+/g;
-
-return text.replace(regex,url=>{
-
-const id=getYoutubeID(url);
-
-if(!id)return url;
-
-return `<iframe width="100%" height="250"
-src="https://www.youtube.com/embed/${id}"
-frameborder="0"
-allowfullscreen
-style="margin-top:10px;border-radius:8px;">
-</iframe>`;
+categories.push(d.data());
 
 });
 
-}
 
-const categoryList=document.getElementById("categoryList");
-const productList=document.getElementById("productList");
-const productDetail=document.getElementById("productDetail");
-const mobileModal=document.getElementById("mobileModal");
+categories.sort((a,b)=>a.order-b.order);
 
 
-function searchAll(){
-currentCategory=null;
-renderCategories();
-renderProducts();
-}
+
+let products=[];
+
+productsSnap.forEach(d=>{
+
+products.push(d.data());
+
+});
 
 
-function showProduct(p){
+let html="";
 
-let desc=convertYoutube(p.desc ? p.desc : "");
-
-const html=`
-
-<h2>${p.name}</h2>
-
-<div style="
-white-space:pre-wrap;
-line-height:1.7;
-word-break:break-word;
-">
-
-${desc}
-
-</div>
-
-${p.image && p.image!=="null" ?
-
-(getYoutubeID(p.image)?
-
-`<iframe width="100%" height="250"
-src="https://www.youtube.com/embed/${getYoutubeID(p.image)}"
-frameborder="0"
-allowfullscreen
-style="margin-top:10px;border-radius:8px;">
-</iframe>`
-
-:
-
-`<img src="${p.image}" style="max-width:100%;border-radius:8px;">`
-
-)
-
-:""}
-
-
-${p.video && p.video!=="null" ?
-
-(getYoutubeID(p.video)?
-
-`<iframe width="100%" height="250"
-src="https://www.youtube.com/embed/${getYoutubeID(p.video)}"
-frameborder="0"
-allowfullscreen
-style="margin-top:10px;border-radius:8px;">
-</iframe>`
-
-:"")
-
-:""}
-
-`;
-
-if(window.innerWidth<=700){
-
-mobileModal.style.display="block";
-
-mobileModal.innerHTML=`
-<button onclick="closeModal()">← 戻る</button>
-${html}
-`;
-
-}else{
-
-productDetail.innerHTML=html;
-
-}
-
-}
-
-
-window.closeModal=function(){
-mobileModal.style.display="none";
-}
-
-
-function renderCategories(){
-
-categoryList.innerHTML="";
-
-const all=document.createElement("div");
-all.className="categoryBtn";
-all.innerHTML="すべて";
-
-all.onclick=()=>{
-currentCategory=null;
-renderProducts();
-};
-
-categoryList.appendChild(all);
 
 categories.forEach(cat=>{
 
-const btn=document.createElement("div");
-btn.className="categoryBtn";
+html+=`
 
-btn.innerHTML=`
-${cat.image?`<img class="categoryIcon" src="${cat.image}">`:""}
-<div>${cat.name}</div>
+<div class="categoryTitle">
+
+${cat.name}
+
+</div>
+
+<div class="grid">
+
 `;
 
-btn.onclick=()=>{
-currentCategory=cat.name;
-renderProducts();
-};
-
-categoryList.appendChild(btn);
-
-});
-
-}
-
-
-onSnapshot(query(collection(db,"categories"),orderBy("order")),snap=>{
-
-categories=[];
-snap.forEach(d=>categories.push(d.data()));
-renderCategories();
-
-});
-
-
-onSnapshot(query(collection(db,"products"),orderBy("order")),snap=>{
-
-products=[];
-snap.forEach(d=>products.push(d.data()));
-renderProducts();
-
-});
-
-
-function renderProducts(){
-
-const keyword=document.getElementById("searchBox").value.toLowerCase();
-
-productList.innerHTML="";
 
 products
-.filter(p=>!currentCategory||p.category===currentCategory)
-.filter(p=>p.name.toLowerCase().includes(keyword))
+.filter(p=>p.category===cat.name)
+.sort((a,b)=>a.order-b.order)
+
 .forEach(p=>{
 
-const card=document.createElement("div");
 
-card.className="card";
+html+=`
 
-card.innerHTML=`
 
-${p.image && p.image!=="null" ?
+<div class="productCard">
 
-(getYoutubeID(p.image)?
 
-`<img src="https://img.youtube.com/vi/${getYoutubeID(p.image)}/hqdefault.jpg">`
+
+${
+p.video?
+
+`<iframe class="productVideo"
+src="${p.video}"
+frameborder="0"
+allowfullscreen>
+</iframe>`
 
 :
 
-`<img src="${p.image}">`
-
-)
-
-:""}
-
-<div>${p.name}</div>
-
-`;
-
-card.onclick=()=>showProduct(p);
-
-productList.appendChild(card);
-
-});
+`<img class="productImage"
+src="${p.image}">
+`
 
 }
 
-</script>
 
 
-<script>
+<div class="productName">
 
-const font=localStorage.getItem("siteFont");
+${p.name}
 
-if(font)
-document.body.style.fontFamily=font;
+</div>
+
+
+<div class="productDescription">
+
+${p.description||""}
+
+</div>
+
+
+
+</div>
+
+
+`;
+
+
+});
+
+
+html+="</div>";
+
+});
+
+
+appDiv.innerHTML=html;
+
+
+}
+
+
+load();
+
 
 </script>
 
