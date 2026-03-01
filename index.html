@@ -12,6 +12,10 @@
 
 <style>
 
+*{
+box-sizing:border-box;
+}
+
 body{
 margin:0;
 font-family:'Orbitron',sans-serif;
@@ -40,6 +44,8 @@ border-bottom:2px solid #00ffff;
 
 box-shadow:0 0 20px #00ffff;
 
+z-index:100;
+
 }
 
 .logoText{
@@ -49,6 +55,7 @@ font-size:22px;
 text-shadow:0 0 10px #00ffff;
 
 }
+
 
 /* 本体 */
 
@@ -60,7 +67,19 @@ padding:10px;
 }
 
 
-/* カード */
+/* カテゴリ */
+
+.categoryTitle{
+
+font-size:22px;
+margin-top:30px;
+color:#ff00ff;
+text-shadow:0 0 10px #ff00ff;
+
+}
+
+
+/* 商品カード */
 
 .productCard{
 
@@ -80,23 +99,21 @@ box-shadow:
 }
 
 
-/* 画像 */
+/* 商品画像 */
 
 .productImage{
 
 width:100%;
-
 border-radius:6px;
 
 }
 
 
-/* 名前 */
+/* 商品名 */
 
 .productName{
 
 font-size:18px;
-
 margin-top:5px;
 
 }
@@ -107,8 +124,22 @@ margin-top:5px;
 .productDescription{
 
 font-size:14px;
-
 color:#aaa;
+
+}
+
+
+/* グリッド */
+
+.grid{
+
+display:grid;
+
+grid-template-columns:
+
+repeat(auto-fill,minmax(220px,1fr));
+
+gap:10px;
 
 }
 
@@ -117,6 +148,7 @@ color:#aaa;
 </head>
 
 <body>
+
 
 <div class="header">
 
@@ -129,6 +161,7 @@ CYBER SHOP
 </div>
 
 
+
 <div class="container" id="app">
 
 Loading...
@@ -139,36 +172,32 @@ Loading...
 
 <script type="module">
 
-import { initializeApp } from
-"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 
 import {
 getFirestore,
 collection,
 getDocs
-} from
-"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+}
+from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 
+const firebaseConfig = {
 
-/* あなたのFirebase設定をここに入れる */
+apiKey: "AIzaSyDDhUgvH7o4SymhG3QVTRe6CDAlJM_Vk_A",
 
-const firebaseConfig={
+authDomain: "project-3088108151926999605.firebaseapp.com",
 
-apiKey:"ここにAPIKEY",
+projectId: "project-3088108151926999605",
 
-authDomain:"ここにfirebaseapp",
+storageBucket: "project-3088108151926999605.firebasestorage.app",
 
-projectId:"ここにprojectID",
+messagingSenderId: "331871777494",
 
-storageBucket:"ここにappspot",
-
-messagingSenderId:"ここにID",
-
-appId:"ここにAPPID"
+appId: "1:331871777494:web:8de28a405de387f7240f77"
 
 };
-
 
 
 const app=initializeApp(firebaseConfig);
@@ -181,52 +210,83 @@ const appDiv=document.getElementById("app");
 
 async function load(){
 
-const catSnap=
+const categoriesSnap=
 await getDocs(collection(db,"categories"));
 
-const proSnap=
+const productsSnap=
 await getDocs(collection(db,"products"));
+
+
+let categories=[];
+
+categoriesSnap.forEach(d=>{
+categories.push(d.data());
+});
+
+
+categories.sort((a,b)=>a.order-b.order);
+
+
+let products=[];
+
+productsSnap.forEach(d=>{
+products.push(d.data());
+});
 
 
 let html="";
 
 
-catSnap.forEach(cat=>{
+categories.forEach(cat=>{
 
-const c=cat.data();
+html+=`
 
-html+=`<h2>${c.name}</h2>`;
+<div class="categoryTitle">
+
+${cat.name}
+
+</div>
+
+<div class="grid">
+
+`;
 
 
-proSnap.forEach(p=>{
+products
+.filter(p=>p.category===cat.name)
+.sort((a,b)=>a.order-b.order)
 
-const pr=p.data();
+.forEach(p=>{
 
-if(pr.category==c.name){
 
 html+=`
 
 <div class="productCard">
 
 <img class="productImage"
-src="${pr.image}">
+src="${p.image}">
 
 <div class="productName">
-${pr.name}
+
+${p.name}
+
 </div>
 
 <div class="productDescription">
-${pr.description||""}
+
+${p.description||""}
+
 </div>
 
 </div>
 
 `;
 
-}
 
 });
 
+
+html+="</div>";
 
 });
 
