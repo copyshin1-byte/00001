@@ -336,5 +336,25 @@ font-size:17px;
 line-height:1.7;
 
 }
+  
+/* スマホ画像サイズ制限（追加のみ） */
+@media(max-width:700px){
+
+.detail img{
+width:100%;
+max-height:300px;
+object-fit:contain;
+}
+
+.modal img{
+width:100%;
+max-height:300px;
+object-fit:contain;
+}
+
+iframe{
+width:100%;
+max-height:250px;
+}
 
 }
