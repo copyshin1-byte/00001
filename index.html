@@ -1,307 +1,221 @@
-<!doctype html>
-<html lang="ja">
-
-<head>
-
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-
-<title>CYBER SHOP</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-
-<style>
-
-*{
-box-sizing:border-box;
-}
-
-body{
-margin:0;
-font-family:'Orbitron',sans-serif;
-background:#000;
-color:#00ffff;
-}
-
-/* 上バー */
-
-.header{
-
-position:fixed;
-top:0;
-left:0;
-right:0;
-
-height:60px;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-background:black;
-
-border-bottom:2px solid #00ffff;
-
-box-shadow:0 0 20px #00ffff;
-
-z-index:100;
-
-}
-
-.logoText{
-
-font-size:22px;
-
-text-shadow:0 0 10px #00ffff;
-
-}
-
-
-/* 本体 */
-
-.container{
-
-margin-top:80px;
-padding:10px;
-
-}
-
-
-/* カテゴリ */
-
-.categoryTitle{
-
-font-size:22px;
-margin-top:30px;
-color:#ff00ff;
-text-shadow:0 0 10px #ff00ff;
-
-}
-
-
-/* 商品カード */
-
-.productCard{
-
-background:black;
-
-border:1px solid #00ffff;
-
-border-radius:10px;
-
-padding:10px;
-
-margin:10px;
-
-box-shadow:
-0 0 10px #00ffff;
-
-}
-
-
-/* 商品画像 */
-
-.productImage{
-
-width:100%;
-border-radius:6px;
-
-}
-
-
-/* 商品名 */
-
-.productName{
-
-font-size:18px;
-margin-top:5px;
-
-}
-
-
-/* 説明 */
-
-.productDescription{
-
-font-size:14px;
-color:#aaa;
-
-}
-
-
-/* グリッド */
-
-.grid{
-
-display:grid;
-
-grid-template-columns:
-
-repeat(auto-fill,minmax(220px,1fr));
-
-gap:10px;
-
-}
-
-</style>
-
-</head>
-
-<body>
-
-
-<div class="header">
-
-<div class="logoText">
-
-CYBER SHOP
-
-</div>
-
-</div>
-
-
-
-<div class="container" id="app">
-
-Loading...
-
-</div>
-
-
-
-<script type="module">
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-
-import {
-getFirestore,
-collection,
-getDocs
-}
-from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-
-const firebaseConfig = {
-
-apiKey: "AIzaSyDDhUgvH7o4SymhG3QVTRe6CDAlJM_Vk_A",
-
-authDomain: "project-3088108151926999605.firebaseapp.com",
-
-projectId: "project-3088108151926999605",
-
-storageBucket: "project-3088108151926999605.firebasestorage.app",
-
-messagingSenderId: "331871777494",
-
-appId: "1:331871777494:web:8de28a405de387f7240f77"
-
-};
-
-
-const app=initializeApp(firebaseConfig);
-
-const db=getFirestore(app);
-
-
-const appDiv=document.getElementById("app");
-
-
-async function load(){
-
-const categoriesSnap=
-await getDocs(collection(db,"categories"));
-
-const productsSnap=
-await getDocs(collection(db,"products"));
-
-
-let categories=[];
-
-categoriesSnap.forEach(d=>{
-categories.push(d.data());
-});
-
-
-categories.sort((a,b)=>a.order-b.order);
-
-
-let products=[];
-
-productsSnap.forEach(d=>{
-products.push(d.data());
-});
-
-
-let html="";
-
-
-categories.forEach(cat=>{
-
-html+=`
-
-<div class="categoryTitle">
-
-${cat.name}
-
-</div>
-
-<div class="grid">
-
-`;
-
-
-products
-.filter(p=>p.category===cat.name)
-.sort((a,b)=>a.order-b.order)
-
-.forEach(p=>{
-
-
-html+=`
-
-<div class="productCard">
-
-<img class="productImage"
-src="${p.image}">
-
-<div class="productName">
-
-${p.name}
-
-</div>
-
-<div class="productDescription">
-
-${p.description||p.desc||p.text||""}
-
-</div>
-
-</div>
-
-`;
-
-
-});
-
-
-html+="</div>";
-
-});
-
-
-appDiv.innerHTML=html;
-
-
-}
-
-
-load();
-
-
-</script>
-
-
-</body>
+<!doctype html>    
+<html lang="ja">    
+    
+<head>    
+    
+<meta charset="utf-8">    
+<meta name="viewport" content="width=device-width,initial-scale=1">    
+    
+<title>CYBER SHOP</title>    
+    
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">    
+    
+<style>    
+    
+*{box-sizing:border-box;}    
+    
+body{    
+margin:0;    
+font-family:"Orbitron";    
+color:#00ffff;    
+background:#020617;    
+}    
+    
+.header{    
+position:fixed;    
+top:0;    
+left:0;    
+right:0;    
+height:60px;    
+display:flex;    
+align-items:center;    
+justify-content:center;    
+background:black;    
+border-bottom:2px solid #00ffff;    
+box-shadow:0 0 20px #00ffff;    
+z-index:100;    
+}    
+    
+.logoText{    
+font-size:18px;    
+text-shadow:0 0 10px #00ffff;    
+}    
+    
+.container{    
+max-width:1200px;    
+margin:70px auto 0;    
+padding:10px;    
+}    
+    
+.categoryTitle{    
+font-size:20px;    
+margin-top:30px;    
+color:#ff00ff;    
+text-shadow:0 0 10px #ff00ff;    
+}    
+    
+.productCard{    
+background:black;    
+border:1px solid #00ffff;    
+border-radius:8px;    
+padding:10px;    
+margin:10px;    
+box-shadow:0 0 10px #00ffff;    
+}    
+    
+.productImage{    
+width:100%;    
+border-radius:6px;    
+}    
+    
+.productName{    
+font-size:16px;    
+margin-top:5px;    
+}    
+    
+.productDescription{    
+font-size:13px;    
+color:#aaa;    
+}    
+    
+.grid{    
+display:grid;    
+grid-template-columns:repeat(auto-fill,minmax(220px,1fr));    
+gap:10px;    
+}    
+    
+</style>    
+    
+</head>    
+    
+<body>    
+    
+<div class="header">    
+<div class="logoText">    
+CYBER SHOP    
+</div>    
+</div>    
+    
+<div class="container" id="app">    
+    
+Loading...    
+    
+</div>    
+    
+    
+<script type="module">    
+    
+import { initializeApp } from    
+"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";    
+    
+import {    
+getFirestore,    
+collection,    
+getDocs    
+} from    
+"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";    
+    
+    
+const firebaseConfig = {    
+apiKey: "AIzaSyDDhUgvH7o4SymhG3QVTRe6CDAlJM_Vk_A",    
+authDomain: "project-3088108151926999605.firebaseapp.com",    
+projectId: "project-3088108151926999605",    
+storageBucket: "project-3088108151926999605.firebasestorage.app",    
+messagingSenderId: "331871777494",    
+appId: "1:331871777494:web:8de28a405de387f7240f77"    
+};    
+    
+    
+const app=initializeApp(firebaseConfig);    
+const db=getFirestore(app);    
+    
+    
+const appDiv=document.getElementById("app");    
+    
+    
+async function load(){    
+    
+const categoriesSnap=    
+await getDocs(collection(db,"categories"));    
+    
+const productsSnap=    
+await getDocs(collection(db,"products"));    
+    
+    
+let categories=[];    
+    
+categoriesSnap.forEach(d=>{    
+categories.push(d.data());    
+});    
+    
+    
+categories.sort((a,b)=>a.order-b.order);    
+    
+    
+let products=[];    
+    
+productsSnap.forEach(d=>{    
+products.push(d.data());    
+});    
+    
+    
+let html="";    
+    
+    
+categories.forEach(cat=>{    
+    
+html+=`    
+<div class="categoryTitle">    
+${cat.name}    
+</div>    
+    
+<div class="grid">    
+`;    
+    
+    
+products    
+.filter(p=>p.category===cat.name)    
+.sort((a,b)=>a.order-b.order)    
+    
+.forEach(p=>{    
+    
+html+=`    
+    
+<div class="productCard">    
+    
+<img class="productImage"    
+src="${p.image}">    
+    
+<div class="productName">    
+${p.name}    
+</div>    
+    
+<div class="productDescription">    
+${p.description||p.desc||p.text||""}    
+</div>    
+    
+</div>    
+    
+`;    
+    
+});    
+    
+    
+html+="</div>";    
+    
+});    
+    
+    
+appDiv.innerHTML=html;    
+    
+    
+}    
+    
+    
+load();    
+    
+    
+</script>    
+    
+</body>    
 </html>
