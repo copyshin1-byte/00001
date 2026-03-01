@@ -67,6 +67,16 @@ margin:6px 0;
 cursor:pointer;
 border:1px solid #00eaff55;
 border-radius:8px;
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.categoryBtn img{
+width:40px;
+height:40px;
+object-fit:cover;
+border-radius:6px;
 }
 
 #searchBox{
@@ -135,6 +145,12 @@ flex-direction:column;
 display:none;
 }
 
+.modal img{
+max-width:100%;
+max-height:45vh;
+object-fit:contain;
+}
+
 }
 
 </style>
@@ -155,6 +171,7 @@ display:none;
 </div>
 
 <div class="panel products">
+
 <h3>PRODUCT DATABASE</h3>
 
 <input id="searchBox"
@@ -251,8 +268,6 @@ return `<iframe src="https://www.youtube.com/embed/${yt}" allowfullscreen></ifra
 
 }
 
-/* ★ここだけ修正 */
-
 if(url.startsWith("http")){
 
 return `<img src="${url}" style="max-width:100%;max-height:45vh;height:auto;object-fit:contain;">`;
@@ -264,17 +279,28 @@ return "";
 }
 
 
+/* ★カテゴリ画像表示 */
+
 function renderCategories(){
 
 categoryList.innerHTML="";
 
 categories.forEach(cat=>{
 
+let img="";
+
+if(cat.image && cat.image.startsWith("http")){
+img=`<img src="${cat.image}">`;
+}
+
 const div=document.createElement("div");
 
 div.className="categoryBtn";
 
-div.innerText=cat.name;
+div.innerHTML=`
+${img}
+<span>${cat.name}</span>
+`;
 
 div.onclick=()=>{
 
@@ -405,9 +431,7 @@ onSnapshot(query(collection(db,"categories"),orderBy("order")),snap=>{
 categories=[];
 
 snap.forEach(doc=>{
-
 categories.push(doc.data());
-
 });
 
 renderCategories();
@@ -420,9 +444,7 @@ onSnapshot(query(collection(db,"products"),orderBy("order")),snap=>{
 products=[];
 
 snap.forEach(doc=>{
-
 products.push(doc.data());
-
 });
 
 renderProducts();
