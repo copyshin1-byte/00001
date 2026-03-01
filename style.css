@@ -3,154 +3,271 @@ box-sizing:border-box;
 }
 
 body{
+
 margin:0;
+
 font-family:"Orbitron","Noto Sans JP";
+
 background:
+
 radial-gradient(circle at 20% 20%,#0a0f2b,#000);
+
 color:#00eaff;
+
 }
 
 
 /* ヘッダー */
 
 .header{
+
 position:fixed;
+
 top:0;
+
 width:100%;
+
 height:65px;
+
 display:flex;
+
 justify-content:center;
+
 align-items:center;
+
 background:#000;
-border-bottom:1px solid #00eaff;
-box-shadow:0 0 20px #00eaff;
+
+border-bottom:
+
+1px solid #00eaff;
+
+box-shadow:
+
+0 0 20px #00eaff;
+
 z-index:100;
+
 }
 
+
 .logoText{
+
 font-size:22px;
+
 letter-spacing:3px;
+
 font-weight:bold;
-text-shadow:0 0 10px #00eaff;
+
+text-shadow:
+
+0 0 10px #00eaff;
+
 }
+
 
 
 /* メイン */
 
 .container{
+
 max-width:1400px;
+
 margin:80px auto;
+
 padding:10px;
+
 display:flex;
+
 gap:20px;
+
 }
+
 
 
 /* パネル */
 
 .panel{
+
 background:rgba(0,0,0,0.7);
-border:1px solid #00eaff;
+
+border:
+
+1px solid #00eaff;
+
 border-radius:14px;
+
 padding:14px;
-box-shadow:0 0 15px #00eaff44;
+
+box-shadow:
+
+0 0 15px #00eaff44;
+
 }
+
+
 
 .categories{ width:260px; }
 .products{ width:420px; }
 .detail{ flex:1; }
 
 
+
 /* カテゴリ */
 
 .categoryBtn{
+
 padding:14px;
+
 margin:6px 0;
+
 cursor:pointer;
-border:1px solid #00eaff55;
+
+border:
+
+1px solid #00eaff55;
+
 border-radius:8px;
+
 transition:.2s;
+
 }
 
 .categoryBtn:hover{
+
 background:#00eaff22;
+
 box-shadow:0 0 10px #00eaff;
+
 }
+
 
 
 /* 検索 */
 
 #searchBox{
+
 width:100%;
+
 padding:12px;
+
 background:black;
+
 color:#00eaff;
+
 border:1px solid #00eaff;
+
 border-radius:8px;
+
 font-size:16px;
+
 margin-bottom:10px;
+
 }
+
 
 
 /* 商品 */
 
 .card{
+
 display:flex;
+
 gap:12px;
+
 padding:12px;
+
 margin-bottom:12px;
-border:1px solid #00eaff55;
+
+border:
+
+1px solid #00eaff55;
+
 border-radius:10px;
+
 cursor:pointer;
+
 transition:.2s;
+
 }
 
 .card:hover{
+
 box-shadow:0 0 20px #00eaff;
+
 transform:translateY(-2px);
+
 }
+
 
 .card img{
+
 width:80px;
 height:80px;
+
 object-fit:cover;
+
 border-radius:8px;
+
 }
 
+
+
 .title{
+
 font-size:16px;
+
 }
+
 
 
 /* 詳細 */
 
 .detail img{
+
 width:100%;
+
 border-radius:10px;
+
 margin-bottom:10px;
+
 }
 
 .detail iframe{
+
 width:100%;
+
 height:300px;
+
 border:none;
+
 }
+
 
 
 /* モーダル */
 
 .modal{
+
 position:fixed;
+
 top:0;
 left:0;
+
 width:100%;
 height:100%;
+
 background:black;
+
 padding:20px;
+
 overflow:auto;
+
 display:none;
+
 z-index:2000;
+
 }
+
 
 
 /* スマホ */
@@ -158,55 +275,98 @@ z-index:2000;
 @media(max-width:700px){
 
 .container{
+
 flex-direction:column;
+
 margin-top:70px;
+
 }
+
 
 .categories,
 .products{
+
 width:100%;
+
 }
+
 
 .detail{
+
 display:none;
+
 }
+
+
 
 #categoryList{
+
 display:flex;
+
 gap:10px;
+
 overflow:auto;
+
 }
+
+
 
 .categoryBtn{
+
 white-space:nowrap;
+
 min-width:120px;
+
 }
+
+
 
 .card img{
+
 width:90px;
 height:90px;
+
 }
+
 
 .modal{
+
 font-size:17px;
+
 line-height:1.7;
+
 }
 
 
-/* ★ここが重要（強制制限） */
+/* ★画像巨大化防止（最終修正版） */
 
 .modal img{
+
+width:auto !important;
+
 max-width:100% !important;
+
 height:auto !important;
-max-height:280px !important;
+
+max-height:45vh !important;
+
 object-fit:contain !important;
+
 display:block;
-margin:auto;
+
+margin:0 auto;
+
 }
 
+
+/* ★動画制限 */
+
 .modal iframe{
-max-width:100% !important;
+
+width:100% !important;
+
 height:230px !important;
+
 }
 
 }
