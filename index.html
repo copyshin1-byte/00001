@@ -6,7 +6,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>CYBER PRODUCT LIST</title>
+<title>CYBER SHOP</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
@@ -15,32 +15,101 @@
 body{
 margin:0;
 font-family:'Orbitron',sans-serif;
-background:black;
+background:#000;
 color:#00ffff;
 }
 
+/* 上バー */
+
 .header{
+
 position:fixed;
 top:0;
 left:0;
 right:0;
+
 height:60px;
+
 display:flex;
 align-items:center;
 justify-content:center;
-background:#000;
+
+background:black;
+
 border-bottom:2px solid #00ffff;
+
 box-shadow:0 0 20px #00ffff;
+
 }
 
 .logoText{
+
 font-size:22px;
+
 text-shadow:0 0 10px #00ffff;
+
 }
 
+/* 本体 */
+
 .container{
+
 margin-top:80px;
 padding:10px;
+
+}
+
+
+/* カード */
+
+.productCard{
+
+background:black;
+
+border:1px solid #00ffff;
+
+border-radius:10px;
+
+padding:10px;
+
+margin:10px;
+
+box-shadow:
+0 0 10px #00ffff;
+
+}
+
+
+/* 画像 */
+
+.productImage{
+
+width:100%;
+
+border-radius:6px;
+
+}
+
+
+/* 名前 */
+
+.productName{
+
+font-size:18px;
+
+margin-top:5px;
+
+}
+
+
+/* 説明 */
+
+.productDescription{
+
+font-size:14px;
+
+color:#aaa;
+
 }
 
 </style>
@@ -50,16 +119,129 @@ padding:10px;
 <body>
 
 <div class="header">
+
 <div class="logoText">
-CYBER PRODUCT LIST
-</div>
-</div>
 
-<div class="container">
-
-読み込み中...
+CYBER SHOP
 
 </div>
+
+</div>
+
+
+<div class="container" id="app">
+
+Loading...
+
+</div>
+
+
+
+<script type="module">
+
+import { initializeApp } from
+"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs
+} from
+"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+
+
+/* あなたのFirebase設定をここに入れる */
+
+const firebaseConfig={
+
+apiKey:"ここにAPIKEY",
+
+authDomain:"ここにfirebaseapp",
+
+projectId:"ここにprojectID",
+
+storageBucket:"ここにappspot",
+
+messagingSenderId:"ここにID",
+
+appId:"ここにAPPID"
+
+};
+
+
+
+const app=initializeApp(firebaseConfig);
+
+const db=getFirestore(app);
+
+
+const appDiv=document.getElementById("app");
+
+
+async function load(){
+
+const catSnap=
+await getDocs(collection(db,"categories"));
+
+const proSnap=
+await getDocs(collection(db,"products"));
+
+
+let html="";
+
+
+catSnap.forEach(cat=>{
+
+const c=cat.data();
+
+html+=`<h2>${c.name}</h2>`;
+
+
+proSnap.forEach(p=>{
+
+const pr=p.data();
+
+if(pr.category==c.name){
+
+html+=`
+
+<div class="productCard">
+
+<img class="productImage"
+src="${pr.image}">
+
+<div class="productName">
+${pr.name}
+</div>
+
+<div class="productDescription">
+${pr.description||""}
+</div>
+
+</div>
+
+`;
+
+}
+
+});
+
+
+});
+
+
+appDiv.innerHTML=html;
+
+
+}
+
+
+load();
+
+
+</script>
+
 
 </body>
 </html>
