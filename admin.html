@@ -55,12 +55,9 @@ cursor:pointer;
 <button onclick="login()">パスワード入力</button>
 <button onclick="logout()">ログアウト</button>
 
-
 <div id="mainPanel" style="display:none;">
 
-
 <div class="panel">
-
 <h3>商品追加</h3>
 
 <select id="productCategory"></select>
@@ -77,9 +74,7 @@ cursor:pointer;
 <option value="更新">更新</option>
 </select>
 
-<button onclick="addProduct()">
-商品追加
-</button>
+<button onclick="addProduct()">商品追加</button>
 
 <hr>
 
@@ -94,12 +89,9 @@ cursor:pointer;
 <h3>カテゴリ追加</h3>
 
 <input id="catName">
-
 <input id="catImage" placeholder="カテゴリ画像URL">
 
-<button onclick="addCategory()">
-カテゴリ追加
-</button>
+<button onclick="addCategory()">カテゴリ追加</button>
 
 </div>
 
@@ -119,12 +111,9 @@ cursor:pointer;
 
 </select>
 
-<button onclick="saveFont()">
-フォント保存
-</button>
+<button onclick="saveFont()">フォント保存</button>
 
 </div>
-
 
 </div>
 
@@ -160,7 +149,6 @@ appId: "1:331871777494:web:8de28a405de387f7240f77"
 
 };
 
-
 const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
 
@@ -170,8 +158,7 @@ function normalizeYoutube(url){
 
 if(!url) return "";
 
-if(url.includes("watch?v="))
-return url;
+if(url.includes("watch?v=")) return url;
 
 if(url.includes("youtu.be/"))
 return "https://www.youtube.com/watch?v="+
@@ -187,7 +174,7 @@ return url;
 
 
 
-const ADMIN_PASSWORD="asas1212";
+const ADMIN_PASSWORD="1234";
 const LOGIN_KEY="admin_login_time";
 const LOGIN_DURATION=24*60*60*1000;
 
@@ -201,16 +188,14 @@ let openCategories={};
 
 const productList=document.getElementById("productList");
 const productCategory=document.getElementById("productCategory");
+const mainPanel=document.getElementById("mainPanel");
 
 
 
 window.saveFont=function(){
-
 localStorage.setItem("siteFont",
 document.getElementById("fontSelect").value);
-
 alert("保存しました");
-
 }
 
 
@@ -220,7 +205,6 @@ function checkAutoLogin(){
 const t=localStorage.getItem(LOGIN_KEY);
 
 if(t && Date.now()-t<LOGIN_DURATION)
-
 mainPanel.style.display="block";
 
 }
@@ -232,7 +216,6 @@ window.login=function(){
 if(prompt("パスワード")==ADMIN_PASSWORD){
 
 localStorage.setItem(LOGIN_KEY,Date.now());
-
 mainPanel.style.display="block";
 
 }
@@ -244,7 +227,6 @@ mainPanel.style.display="block";
 window.logout=function(){
 
 localStorage.removeItem(LOGIN_KEY);
-
 location.reload();
 
 }
@@ -313,23 +295,20 @@ pVideo.value="";
 window.deleteProduct=id=>{
 
 if(confirm("削除しますか"))
-
 deleteDoc(doc(db,"products",id))
 
 }
 
 
 
-/* ★カテゴリ削除（商品削除選択付き） */
+/* カテゴリ削除（商品削除選択付き） */
 
 window.deleteCategory=async function(id){
 
 if(!confirm("カテゴリ削除しますか？")) return;
 
-
 const deleteProductsToo=
 confirm("このカテゴリ内の商品も削除しますか？");
-
 
 if(deleteProductsToo){
 
@@ -341,15 +320,12 @@ const targetProducts=
 products.filter(p=>p.category===cat.name);
 
 for(const p of targetProducts){
-
 await deleteDoc(doc(db,"products",p.id));
-
 }
 
 }
 
 }
-
 
 await deleteDoc(doc(db,"categories",id));
 
@@ -357,55 +333,72 @@ await deleteDoc(doc(db,"categories",id));
 
 
 
-/* 以下元コードそのまま */
+/* ★カテゴリ編集（商品カテゴリも変更） */
 
+window.editCategory=async function(cat){
 
+const oldName=cat.name;
 
-window.editProduct=p=>{
-
-const name=prompt("商品名",p.name);
+const name=prompt("カテゴリ名",cat.name);
 if(name===null)return;
 
-updateDoc(doc(db,"products",p.id),{
+const image=prompt("画像URL",cat.image||"");
+
+/* カテゴリ更新 */
+
+await updateDoc(doc(db,"categories",cat.id),{
 
 name,
-desc:prompt("説明",p.desc),
-image:normalizeYoutube(prompt("画像URL",p.image)),
-video:normalizeYoutube(prompt("動画URL",p.video||"")),
-tag:prompt("タグ",p.tag||""),
+image,
 updatedAt:Date.now()
+
+});
+
+
+/* 商品カテゴリ名更新 */
+
+const targetProducts=
+products.filter(p=>p.category===oldName);
+
+for(const p of targetProducts){
+
+await updateDoc(doc(db,"products",p.id),{
+
+category:name
 
 });
 
 }
 
+}
 
 
-window.moveProductUp=async id=>{
 
-const s=[...products].sort((a,b)=>a.order-b.order);
+window.moveCategoryUp=async id=>{
 
-const i=s.findIndex(p=>p.id===id);
+const s=[...categories].sort((a,b)=>a.order-b.order);
+
+const i=s.findIndex(c=>c.id===id);
 
 if(i<=0)return;
 
-updateDoc(doc(db,"products",s[i].id),{order:s[i-1].order});
-updateDoc(doc(db,"products",s[i-1].id),{order:s[i].order});
+await updateDoc(doc(db,"categories",s[i].id),{order:s[i-1].order});
+await updateDoc(doc(db,"categories",s[i-1].id),{order:s[i].order});
 
 }
 
 
 
-window.moveProductDown=async id=>{
+window.moveCategoryDown=async id=>{
 
-const s=[...products].sort((a,b)=>a.order-b.order);
+const s=[...categories].sort((a,b)=>a.order-b.order);
 
-const i=s.findIndex(p=>p.id===id);
+const i=s.findIndex(c=>c.id===id);
 
 if(i>=s.length-1)return;
 
-updateDoc(doc(db,"products",s[i].id),{order:s[i+1].order});
-updateDoc(doc(db,"products",s[i+1].id),{order:s[i].order});
+await updateDoc(doc(db,"categories",s[i].id),{order:s[i+1].order});
+await updateDoc(doc(db,"categories",s[i+1].id),{order:s[i].order});
 
 }
 
@@ -414,7 +407,6 @@ updateDoc(doc(db,"products",s[i+1].id),{order:s[i].order});
 function toggleCategory(name){
 
 openCategories[name]=!openCategories[name];
-
 renderProducts();
 
 }
@@ -424,13 +416,11 @@ renderProducts();
 onSnapshot(query(collection(db,"categories"),orderBy("order")),snap=>{
 
 categories=[];
-
 productCategory.innerHTML="";
 
 snap.forEach(d=>{
 
 const data={id:d.id,...d.data()};
-
 categories.push(data);
 
 const opt=document.createElement("option");
