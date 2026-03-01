@@ -6,78 +6,107 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>製品一覧</title>
+<title>MT GROUP</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Noto+Sans+JP&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
 
 </head>
+
 
 <body>
 
 <div class="header">
+
 <div class="logoText">
-CYBER PRODUCTS
+MT GROUP TERMINAL
 </div>
+
 </div>
+
+
 
 <div class="container">
 
+
 <div class="panel categories">
-<h3>Contents</h3>
+
+<h3>CONTENTS</h3>
+
 <div id="categoryList"></div>
+
 </div>
+
+
 
 <div class="panel products">
 
-<h3>product</h3>
+<h3>PRODUCT DATABASE</h3>
 
 <input id="searchBox"
-placeholder="商品検索"
+placeholder="SEARCH PRODUCT"
 oninput="searchAll()">
 
 <div id="productList"></div>
 
 </div>
 
+
+
 <div class="panel detail">
 
-<h3>説明</h3>
+<h3>DETAIL INFO</h3>
 
 <div id="productDetail">
-製品を選択してください
-</div>
+
+SELECT PRODUCT
 
 </div>
 
 </div>
+
+
+</div>
+
 
 <div id="mobileModal" class="modal"></div>
+
+
+
 
 <script type="module">
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDDhUgvH7o4SymhG3QVTRe6CDAlJM_Vk_A",
-  authDomain: "project-3088108151926999605.firebaseapp.com",
-  projectId: "project-3088108151926999605",
-  storageBucket: "project-3088108151926999605.firebasestorage.app",
-  messagingSenderId: "331871777494",
-  appId: "1:331871777494:web:8de28a405de387f7240f77"
+
+const firebaseConfig={
+
+apiKey:"AIzaSyAii9UA3YBztj3XE8QErStcf-TpIkFJYWQ",
+authDomain:"mtgroup-df495.firebaseapp.com",
+projectId:"mtgroup-df495",
+storageBucket:"mtgroup-df495.firebasestorage.app",
+messagingSenderId:"33007954637",
+appId:"1:33007954637:web:0a1c249df6764f8d855784"
+
 };
+
 
 const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
+
+
 
 let categories=[];
 let products=[];
 let currentCategory=null;
 
 
+
 function getYoutubeID(url){
 
-if(!url)return null;
+if(!url) return null;
 
 if(url.includes("watch?v="))
 return url.split("watch?v=")[1].split("&")[0];
@@ -89,28 +118,31 @@ return null;
 
 }
 
-function convertYoutube(text){
 
-if(!text)return "";
 
-const regex=/https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/[^\s]+/g;
-
-return text.replace(regex,url=>{
+function getYoutubeThumb(url){
 
 const id=getYoutubeID(url);
 
-if(!id)return url;
+if(!id) return null;
 
-return `<iframe width="100%" height="250"
-src="https://www.youtube.com/embed/${id}"
-frameborder="0"
-allowfullscreen
-style="margin-top:10px;border-radius:8px;">
-</iframe>`;
-
-});
+return `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
 
 }
+
+
+
+function getYoutubeEmbed(url){
+
+const id=getYoutubeID(url);
+
+if(!id) return url;
+
+return `https://www.youtube.com/embed/${id}`;
+
+}
+
+
 
 const categoryList=document.getElementById("categoryList");
 const productList=document.getElementById("productList");
@@ -118,76 +150,152 @@ const productDetail=document.getElementById("productDetail");
 const mobileModal=document.getElementById("mobileModal");
 
 
-function searchAll(){
-currentCategory=null;
+
+onSnapshot(query(collection(db,"categories"),orderBy("order")),snap=>{
+
+categories=[];
+
+snap.forEach(doc=>{
+categories.push(doc.data());
+});
+
 renderCategories();
+
+});
+
+
+
+onSnapshot(query(collection(db,"products"),orderBy("order")),snap=>{
+
+products=[];
+
+snap.forEach(doc=>{
+products.push(doc.data());
+});
+
 renderProducts();
+
+});
+
+
+
+function renderCategories(){
+
+categoryList.innerHTML="";
+
+categories.forEach(cat=>{
+
+const div=document.createElement("div");
+
+div.className="categoryBtn";
+
+div.innerText=cat.name;
+
+div.onclick=()=>{
+
+currentCategory=cat.name;
+renderProducts();
+
+};
+
+categoryList.appendChild(div);
+
+});
+
 }
 
 
-function showProduct(p){
 
-let desc=convertYoutube(p.desc ? p.desc : "");
+function renderProducts(){
+
+productList.innerHTML="";
+
+products
+
+.filter(p=>!currentCategory || p.category===currentCategory)
+
+.forEach(p=>{
+
+const card=document.createElement("div");
+
+card.className="card";
+
+
+let img=p.image;
+
+
+const yt=getYoutubeThumb(p.image);
+
+if(yt) img=yt;
+
+
+
+card.innerHTML=`
+
+<img src="${img}">
+
+<div>
+
+<div class="title">${p.name}</div>
+
+</div>
+
+`;
+
+
+card.onclick=()=>showDetail(p);
+
+
+productList.appendChild(card);
+
+});
+
+}
+
+
+
+function showDetail(p){
+
+let media="";
+
+
+if(p.image){
+
+const yt=getYoutubeID(p.image);
+
+if(yt){
+
+media=`<iframe src="${getYoutubeEmbed(p.image)}" allowfullscreen></iframe>`;
+
+}else{
+
+media=`<img src="${p.image}">`;
+
+}
+
+}
+
+
 
 const html=`
 
 <h2>${p.name}</h2>
 
-<div style="
-white-space:pre-wrap;
-line-height:1.7;
-word-break:break-word;
-">
+${media}
 
-${desc}
+<br>
 
-</div>
-
-${p.image && p.image!=="null" ?
-
-(getYoutubeID(p.image)?
-
-`<iframe width="100%" height="250"
-src="https://www.youtube.com/embed/${getYoutubeID(p.image)}"
-frameborder="0"
-allowfullscreen
-style="margin-top:10px;border-radius:8px;">
-</iframe>`
-
-:
-
-`<img src="${p.image}" style="max-width:100%;border-radius:8px;">`
-
-)
-
-:""}
-
-
-${p.video && p.video!=="null" ?
-
-(getYoutubeID(p.video)?
-
-`<iframe width="100%" height="250"
-src="https://www.youtube.com/embed/${getYoutubeID(p.video)}"
-frameborder="0"
-allowfullscreen
-style="margin-top:10px;border-radius:8px;">
-</iframe>`
-
-:"")
-
-:""}
+<div>${p.description||""}</div>
 
 `;
 
-if(window.innerWidth<=700){
 
+if(window.innerWidth<700){
+
+mobileModal.innerHTML=html;
 mobileModal.style.display="block";
 
-mobileModal.innerHTML=`
-<button onclick="closeModal()">← 戻る</button>
-${html}
-`;
+mobileModal.onclick=()=>mobileModal.style.display="none";
 
 }else{
 
@@ -198,75 +306,17 @@ productDetail.innerHTML=html;
 }
 
 
-window.closeModal=function(){
-mobileModal.style.display="none";
-}
 
+function searchAll(){
 
-function renderCategories(){
-
-categoryList.innerHTML="";
-
-const all=document.createElement("div");
-all.className="categoryBtn";
-all.innerHTML="すべて";
-
-all.onclick=()=>{
-currentCategory=null;
-renderProducts();
-};
-
-categoryList.appendChild(all);
-
-categories.forEach(cat=>{
-
-const btn=document.createElement("div");
-btn.className="categoryBtn";
-
-btn.innerHTML=`
-${cat.image?`<img class="categoryIcon" src="${cat.image}">`:""}
-<div>${cat.name}</div>
-`;
-
-btn.onclick=()=>{
-currentCategory=cat.name;
-renderProducts();
-};
-
-categoryList.appendChild(btn);
-
-});
-
-}
-
-
-onSnapshot(query(collection(db,"categories"),orderBy("order")),snap=>{
-
-categories=[];
-snap.forEach(d=>categories.push(d.data()));
-renderCategories();
-
-});
-
-
-onSnapshot(query(collection(db,"products"),orderBy("order")),snap=>{
-
-products=[];
-snap.forEach(d=>products.push(d.data()));
-renderProducts();
-
-});
-
-
-function renderProducts(){
-
-const keyword=document.getElementById("searchBox").value.toLowerCase();
+const word=document.getElementById("searchBox").value.toLowerCase();
 
 productList.innerHTML="";
 
 products
-.filter(p=>!currentCategory||p.category===currentCategory)
-.filter(p=>p.name.toLowerCase().includes(keyword))
+
+.filter(p=>p.name.toLowerCase().includes(word))
+
 .forEach(p=>{
 
 const card=document.createElement("div");
@@ -275,25 +325,13 @@ card.className="card";
 
 card.innerHTML=`
 
-${p.image && p.image!=="null" ?
+<img src="${p.image}">
 
-(getYoutubeID(p.image)?
-
-`<img src="https://img.youtube.com/vi/${getYoutubeID(p.image)}/hqdefault.jpg">`
-
-:
-
-`<img src="${p.image}">`
-
-)
-
-:""}
-
-<div>${p.name}</div>
+<div class="title">${p.name}</div>
 
 `;
 
-card.onclick=()=>showProduct(p);
+card.onclick=()=>showDetail(p);
 
 productList.appendChild(card);
 
@@ -301,15 +339,7 @@ productList.appendChild(card);
 
 }
 
-</script>
 
-
-<script>
-
-const font=localStorage.getItem("siteFont");
-
-if(font)
-document.body.style.fontFamily=font;
 
 </script>
 
