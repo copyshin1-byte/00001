@@ -1,20 +1,25 @@
 <!doctype html>
 <html lang="ja">
 <head>
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+
 <title>00001</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Noto+Sans+JP&display=swap" rel="stylesheet">
+
 <style>
-*{
-box-sizing:border-box;
-}
+
+*{box-sizing:border-box;}
+
 body{
 margin:0;
 font-family:"Orbitron","Noto Sans JP";
 background:radial-gradient(circle at 20% 20%,#0a0f2b,#000);
 color:#00eaff;
 }
+
 .header{
 position:fixed;
 top:0;
@@ -23,25 +28,27 @@ height:65px;
 display:flex;
 justify-content:center;
 align-items:center;
-background:black;
+background:#000;
 border-bottom:1px solid #00eaff;
 box-shadow:0 0 20px #00eaff;
 z-index:100;
 }
+
 .logoText{
 font-size:22px;
 letter-spacing:3px;
 font-weight:bold;
 text-shadow:0 0 10px #00eaff;
 }
+
 .container{
 max-width:1400px;
 margin:80px auto;
 padding:10px;
 display:flex;
 gap:20px;
-flex-wrap:wrap;
 }
+
 .panel{
 background:rgba(0,0,0,0.7);
 border:1px solid #00eaff;
@@ -49,29 +56,19 @@ border-radius:14px;
 padding:14px;
 box-shadow:0 0 15px #00eaff44;
 }
-.categories{flex:1;min-width:250px;}
-.products{flex:2;min-width:300px;}
-.detail{flex:2;min-width:300px;}
+
+.categories{width:260px;}
+.products{width:420px;}
+.detail{flex:1;}
+
 .categoryBtn{
-padding:12px;
-margin:5px 0;
+padding:14px;
+margin:6px 0;
+cursor:pointer;
 border:1px solid #00eaff55;
 border-radius:8px;
-cursor:pointer;
-display:flex;
-gap:10px;
-align-items:center;
 }
-.categoryBtn:hover{
-background:#00eaff22;
-box-shadow:0 0 10px #00eaff;
-}
-.categoryBtn img{
-width:36px;
-height:36px;
-object-fit:cover;
-border-radius:6px;
-}
+
 #searchBox{
 width:100%;
 padding:12px;
@@ -79,9 +76,9 @@ background:black;
 color:#00eaff;
 border:1px solid #00eaff;
 border-radius:8px;
-font-size:16px;
 margin-bottom:10px;
 }
+
 .card{
 display:flex;
 gap:12px;
@@ -91,29 +88,30 @@ border:1px solid #00eaff55;
 border-radius:10px;
 cursor:pointer;
 }
-.card:hover{
-box-shadow:0 0 20px #00eaff;
-}
+
 .card img{
-width:90px;
-height:90px;
+width:80px;
+height:80px;
 object-fit:cover;
 border-radius:8px;
 }
+
 .detail img{
 width:100%;
 border-radius:10px;
 margin-bottom:10px;
 }
+
 iframe{
 width:100%;
 height:300px;
 border:none;
 }
+
 .desc{
 white-space:pre-line;
-line-height:1.6;
 }
+
 .modal{
 position:fixed;
 top:0;
@@ -126,172 +124,312 @@ overflow:auto;
 display:none;
 z-index:2000;
 }
+
 @media(max-width:700px){
+
 .container{
 flex-direction:column;
 }
+
 .detail{
 display:none;
 }
+
 }
+
 </style>
+
 </head>
+
 <body>
+
 <div class="header">
-<div class="logoText">
-00001
+<div class="logoText">00001</div>
 </div>
-</div>
+
 <div class="container">
+
 <div class="panel categories">
 <h3>CONTENTS</h3>
 <div id="categoryList"></div>
 </div>
+
 <div class="panel products">
 <h3>PRODUCT DATABASE</h3>
+
 <input id="searchBox"
 placeholder="SEARCH PRODUCT"
 oninput="searchAll()">
+
 <div id="productList"></div>
+
 </div>
+
 <div class="panel detail">
+
 <h3>DETAIL INFO</h3>
+
 <div id="productDetail">
 SELECT PRODUCT
 </div>
+
 </div>
+
 </div>
+
 <div id="mobileModal" class="modal"></div>
+
+
 <script type="module">
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+import {
+getFirestore,
+collection,
+onSnapshot,
+query,
+orderBy
+}
+
+from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+
 const firebaseConfig = {
+
 apiKey: "AIzaSyDDhUgvH7o4SymhG3QVTRe6CDAlJM_Vk_A",
 authDomain: "project-3088108151926999605.firebaseapp.com",
 projectId: "project-3088108151926999605",
 storageBucket: "project-3088108151926999605.firebasestorage.app",
 messagingSenderId: "331871777494",
 appId: "1:331871777494:web:8de28a405de387f7240f77"
+
 };
+
+
 const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
+
+
 let categories=[];
 let products=[];
 let currentCategory=null;
+
+
 const categoryList=document.getElementById("categoryList");
 const productList=document.getElementById("productList");
 const productDetail=document.getElementById("productDetail");
 const mobileModal=document.getElementById("mobileModal");
+
+
 function getYoutubeID(url){
+
 if(!url) return null;
+
 if(url.includes("watch?v="))
 return url.split("watch?v=")[1].split("&")[0];
+
 if(url.includes("youtu.be/"))
 return url.split("youtu.be/")[1];
+
 return null;
+
 }
+
+
 function buildMedia(p){
+
 let url=p.video||p.image;
+
 if(!url) return "";
+
 const yt=getYoutubeID(url);
+
 if(yt){
+
 return `<iframe src="https://www.youtube.com/embed/${yt}" allowfullscreen></iframe>`;
+
 }
+
+/* ★ここだけ修正 */
+
 if(url.startsWith("http")){
-return `<img src="${url}">`;
+
+return `<img src="${url}" style="max-width:100%;max-height:45vh;height:auto;object-fit:contain;">`;
+
 }
+
 return "";
+
 }
+
+
 function renderCategories(){
+
 categoryList.innerHTML="";
+
 categories.forEach(cat=>{
+
 const div=document.createElement("div");
+
 div.className="categoryBtn";
-let img="";
-if(cat.image && cat.image.startsWith("http")){
-img=`<img src="${cat.image}">`;
-}
-div.innerHTML=`
-${img}
-<span>${cat.name}</span>
-`;
+
+div.innerText=cat.name;
+
 div.onclick=()=>{
+
 currentCategory=cat.name;
+
 renderProducts();
+
 };
+
 categoryList.appendChild(div);
+
 });
+
 }
+
+
 function renderProducts(){
+
 productList.innerHTML="";
+
 products
+
 .filter(p=>!currentCategory || p.category===currentCategory)
+
 .forEach(p=>{
+
 let img="";
+
 if(p.image && p.image.startsWith("http")){
+
 img=`<img src="${p.image}">`;
+
 }
+
 const card=document.createElement("div");
+
 card.className="card";
+
 card.innerHTML=`
 ${img}
 <div>${p.name}</div>
 `;
+
 card.onclick=()=>showDetail(p);
+
 productList.appendChild(card);
+
 });
+
 }
+
+
 function showDetail(p){
+
 const media=buildMedia(p);
+
 const description=p.desc||"";
+
 const html=`
+
 <h2>${p.name}</h2>
+
 ${media}
+
 <br>
+
 <div class="desc">${description}</div>
+
 `;
+
 if(window.innerWidth<700){
+
 mobileModal.innerHTML=html;
+
 mobileModal.style.display="block";
+
 mobileModal.onclick=()=>mobileModal.style.display="none";
+
 }else{
+
 productDetail.innerHTML=html;
+
 }
+
 }
+
+
 window.searchAll=function(){
+
 const word=document.getElementById("searchBox").value.toLowerCase();
+
 productList.innerHTML="";
+
 products
+
 .filter(p=>p.name.toLowerCase().includes(word))
+
 .forEach(p=>{
+
 let img="";
+
 if(p.image && p.image.startsWith("http")){
+
 img=`<img src="${p.image}">`;
+
 }
+
 const card=document.createElement("div");
+
 card.className="card";
+
 card.innerHTML=`
 ${img}
 <div>${p.name}</div>
 `;
+
 card.onclick=()=>showDetail(p);
+
 productList.appendChild(card);
+
 });
+
 }
+
+
 onSnapshot(query(collection(db,"categories"),orderBy("order")),snap=>{
+
 categories=[];
+
 snap.forEach(doc=>{
+
 categories.push(doc.data());
+
 });
+
 renderCategories();
+
 });
+
+
 onSnapshot(query(collection(db,"products"),orderBy("order")),snap=>{
+
 products=[];
+
 snap.forEach(doc=>{
+
 products.push(doc.data());
+
 });
+
 renderProducts();
+
 });
+
 </script>
+
 </body>
 </html>
