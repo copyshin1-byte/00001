@@ -6,7 +6,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>00001</title>
+<title>MT GROUP</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Noto+Sans+JP&display=swap" rel="stylesheet">
 
@@ -122,6 +122,12 @@ height:300px;
 border:none;
 }
 
+/* 改行対応 */
+.desc{
+white-space:pre-line;
+line-height:1.6;
+}
+
 .modal{
 position:fixed;
 top:0;
@@ -169,6 +175,7 @@ display:none;
 </div>
 
 <div class="panel products">
+
 <h3>PRODUCT DATABASE</h3>
 
 <input id="searchBox"
@@ -231,6 +238,189 @@ const mobileModal=document.getElementById("mobileModal");
 
 
 
+function getYoutubeID(url){
+
+if(!url) return null;
+
+if(url.includes("watch?v="))
+return url.split("watch?v=")[1].split("&")[0];
+
+if(url.includes("youtu.be/"))
+return url.split("youtu.be/")[1];
+
+return null;
+
+}
+
+
+
+function buildMedia(p){
+
+let url=p.video||p.image;
+
+if(!url) return "";
+
+
+const yt=getYoutubeID(url);
+
+if(yt){
+
+return `<iframe src="https://www.youtube.com/embed/${yt}" allowfullscreen></iframe>`;
+
+}
+
+if(url.startsWith("http")){
+
+return `<img src="${url}">`;
+
+}
+
+return "";
+
+}
+
+
+
+function renderCategories(){
+
+categoryList.innerHTML="";
+
+categories.forEach(cat=>{
+
+const div=document.createElement("div");
+
+div.className="categoryBtn";
+
+div.innerText=cat.name;
+
+div.onclick=()=>{
+
+currentCategory=cat.name;
+renderProducts();
+
+};
+
+categoryList.appendChild(div);
+
+});
+
+}
+
+
+
+function renderProducts(){
+
+productList.innerHTML="";
+
+products
+.filter(p=>!currentCategory || p.category===currentCategory)
+.forEach(p=>{
+
+let img="";
+
+if(p.image && p.image.startsWith("http")){
+
+img=`<img src="${p.image}">`;
+
+}
+
+const card=document.createElement("div");
+
+card.className="card";
+
+card.innerHTML=`
+
+${img}
+
+<div>${p.name}</div>
+
+`;
+
+card.onclick=()=>showDetail(p);
+
+productList.appendChild(card);
+
+});
+
+}
+
+
+
+function showDetail(p){
+
+const media=buildMedia(p);
+
+const description=p.desc||"";
+
+
+const html=`
+
+<h2>${p.name}</h2>
+
+${media}
+
+<br>
+
+<div class="desc">${description}</div>
+
+`;
+
+
+if(window.innerWidth<700){
+
+mobileModal.innerHTML=html;
+mobileModal.style.display="block";
+mobileModal.onclick=()=>mobileModal.style.display="none";
+
+}else{
+
+productDetail.innerHTML=html;
+
+}
+
+}
+
+
+
+window.searchAll=function(){
+
+const word=document.getElementById("searchBox").value.toLowerCase();
+
+productList.innerHTML="";
+
+products
+.filter(p=>p.name.toLowerCase().includes(word))
+.forEach(p=>{
+
+let img="";
+
+if(p.image && p.image.startsWith("http")){
+
+img=`<img src="${p.image}">`;
+
+}
+
+const card=document.createElement("div");
+
+card.className="card";
+
+card.innerHTML=`
+
+${img}
+<div>${p.name}</div>
+
+`;
+
+card.onclick=()=>showDetail(p);
+
+productList.appendChild(card);
+
+});
+
+}
+
+
+
 onSnapshot(query(collection(db,"categories"),orderBy("order")),snap=>{
 
 categories=[];
@@ -255,146 +445,6 @@ products.push(doc.data());
 renderProducts();
 
 });
-
-
-
-function renderCategories(){
-
-categoryList.innerHTML="";
-
-categories.forEach(cat=>{
-
-const div=document.createElement("div");
-
-div.className="categoryBtn";
-
-div.innerText=cat.name;
-
-div.onclick=()=>{
-
-currentCategory=cat.name;
-
-renderProducts();
-
-};
-
-categoryList.appendChild(div);
-
-});
-
-}
-
-
-
-function renderProducts(){
-
-productList.innerHTML="";
-
-products
-.filter(p=>!currentCategory || p.category===currentCategory)
-.forEach(p=>{
-
-const card=document.createElement("div");
-
-card.className="card";
-
-card.innerHTML=`
-
-<img src="${p.image||""}">
-
-<div>${p.name}</div>
-
-`;
-
-card.onclick=()=>showDetail(p);
-
-productList.appendChild(card);
-
-});
-
-}
-
-
-
-function showDetail(p){
-
-let media="";
-
-if(p.video){
-
-const id=p.video.split("v=")[1]?.split("&")[0] || p.video.split("youtu.be/")[1];
-
-media=`<iframe src="https://www.youtube.com/embed/${id}" allowfullscreen></iframe>`;
-
-}else if(p.image){
-
-media=`<img src="${p.image}">`;
-
-}
-
-
-const description=p.desc || "説明なし";
-
-
-const html=`
-
-<h2>${p.name}</h2>
-
-${media}
-
-<br>
-
-<div>${description}</div>
-
-`;
-
-
-if(window.innerWidth<700){
-
-mobileModal.innerHTML=html;
-
-mobileModal.style.display="block";
-
-mobileModal.onclick=()=>mobileModal.style.display="none";
-
-}else{
-
-productDetail.innerHTML=html;
-
-}
-
-}
-
-
-
-window.searchAll=function(){
-
-const word=document.getElementById("searchBox").value.toLowerCase();
-
-productList.innerHTML="";
-
-products
-.filter(p=>p.name.toLowerCase().includes(word))
-.forEach(p=>{
-
-const card=document.createElement("div");
-
-card.className="card";
-
-card.innerHTML=`
-
-<img src="${p.image||""}">
-<div>${p.name}</div>
-
-`;
-
-card.onclick=()=>showDetail(p);
-
-productList.appendChild(card);
-
-});
-
-}
 
 
 </script>
