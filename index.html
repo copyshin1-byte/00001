@@ -23,223 +23,117 @@ background:radial-gradient(circle at 20% 20%,#0a0f2b,#000);
 color:#00eaff;
 }
 
-/* ヘッダー */
-
 .header{
-
 position:fixed;
 top:0;
 width:100%;
 height:65px;
-
 display:flex;
 justify-content:center;
 align-items:center;
-
 background:black;
-
 border-bottom:1px solid #00eaff;
-
 box-shadow:0 0 20px #00eaff;
-
 z-index:100;
-
 }
 
 .logoText{
-
 font-size:22px;
 letter-spacing:3px;
 font-weight:bold;
-
 text-shadow:0 0 10px #00eaff;
-
 }
-
-
-/* コンテナ */
 
 .container{
-
 max-width:1400px;
-
 margin:80px auto;
-
 padding:10px;
-
 display:flex;
-
 gap:20px;
-
 flex-wrap:wrap;
-
 }
-
-/* パネル */
 
 .panel{
-
 background:rgba(0,0,0,0.7);
-
 border:1px solid #00eaff;
-
 border-radius:14px;
-
 padding:14px;
-
 box-shadow:0 0 15px #00eaff44;
-
 }
 
-.categories{
-flex:1;
-min-width:250px;
-}
-
-.products{
-flex:2;
-min-width:300px;
-}
-
-.detail{
-flex:2;
-min-width:300px;
-}
-
-
-/* カテゴリ */
+.categories{flex:1;min-width:250px;}
+.products{flex:2;min-width:300px;}
+.detail{flex:2;min-width:300px;}
 
 .categoryBtn{
-
 padding:12px;
-
 margin:5px 0;
-
 border:1px solid #00eaff55;
-
 border-radius:8px;
-
 cursor:pointer;
-
 }
 
 .categoryBtn:hover{
-
 background:#00eaff22;
-
 box-shadow:0 0 10px #00eaff;
-
 }
-
-
-/* 検索 */
 
 #searchBox{
-
 width:100%;
-
 padding:12px;
-
 background:black;
-
 color:#00eaff;
-
 border:1px solid #00eaff;
-
 border-radius:8px;
-
 font-size:16px;
-
 margin-bottom:10px;
-
 }
 
-
-/* 商品カード */
-
 .card{
-
 display:flex;
-
 gap:12px;
-
 padding:12px;
-
 margin-bottom:12px;
-
 border:1px solid #00eaff55;
-
 border-radius:10px;
-
 cursor:pointer;
-
 }
 
 .card:hover{
-
 box-shadow:0 0 20px #00eaff;
-
 }
 
 .card img{
-
 width:90px;
 height:90px;
-
 object-fit:cover;
-
 border-radius:8px;
-
 }
 
-
-/* 詳細 */
-
 .detail img{
-
 width:100%;
-
 border-radius:10px;
-
 margin-bottom:10px;
-
 }
 
 iframe{
-
 width:100%;
-
 height:300px;
-
 border:none;
-
 }
-
-
-/* モバイル */
 
 .modal{
-
 position:fixed;
-
 top:0;
 left:0;
-
 width:100%;
 height:100%;
-
 background:black;
-
 padding:20px;
-
 overflow:auto;
-
 display:none;
-
 z-index:2000;
-
 }
-
 
 @media(max-width:700px){
 
@@ -267,22 +161,14 @@ MT GROUP TERMINAL
 </div>
 
 
-
 <div class="container">
 
-
 <div class="panel categories">
-
 <h3>CONTENTS</h3>
-
 <div id="categoryList"></div>
-
 </div>
 
-
-
 <div class="panel products">
-
 <h3>PRODUCT DATABASE</h3>
 
 <input id="searchBox"
@@ -294,19 +180,15 @@ oninput="searchAll()">
 </div>
 
 
-
 <div class="panel detail">
 
 <h3>DETAIL INFO</h3>
 
 <div id="productDetail">
-
 SELECT PRODUCT
-
 </div>
 
 </div>
-
 
 </div>
 
@@ -322,12 +204,12 @@ import { getFirestore, collection, onSnapshot, query, orderBy } from "https://ww
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDDhUgvH7o4SymhG3QVTRe6CDAlJM_Vk_A",
-  authDomain: "project-3088108151926999605.firebaseapp.com",
-  projectId: "project-3088108151926999605",
-  storageBucket: "project-3088108151926999605.firebasestorage.app",
-  messagingSenderId: "331871777494",
-  appId: "1:331871777494:web:8de28a405de387f7240f77"
+apiKey: "AIzaSyDDhUgvH7o4SymhG3QVTRe6CDAlJM_Vk_A",
+authDomain: "project-3088108151926999605.firebaseapp.com",
+projectId: "project-3088108151926999605",
+storageBucket: "project-3088108151926999605.firebasestorage.app",
+messagingSenderId: "331871777494",
+appId: "1:331871777494:web:8de28a405de387f7240f77"
 };
 
 
@@ -360,7 +242,6 @@ categories.push(doc.data());
 renderCategories();
 
 });
-
 
 
 onSnapshot(query(collection(db,"products"),orderBy("order")),snap=>{
@@ -411,7 +292,6 @@ productList.innerHTML="";
 
 products
 .filter(p=>!currentCategory || p.category===currentCategory)
-
 .forEach(p=>{
 
 const card=document.createElement("div");
@@ -422,11 +302,7 @@ card.innerHTML=`
 
 <img src="${p.image||""}">
 
-<div>
-
 <div>${p.name}</div>
-
-</div>
 
 `;
 
@@ -444,32 +320,20 @@ function showDetail(p){
 
 let media="";
 
-if(p.image){
+if(p.video){
 
-if(p.image.includes("youtube")||p.image.includes("youtu.be")){
-
-const id=p.image.split("v=")[1]?.split("&")[0] || p.image.split("youtu.be/")[1];
+const id=p.video.split("v=")[1]?.split("&")[0] || p.video.split("youtu.be/")[1];
 
 media=`<iframe src="https://www.youtube.com/embed/${id}" allowfullscreen></iframe>`;
 
-}else{
+}else if(p.image){
 
 media=`<img src="${p.image}">`;
 
 }
 
-}
 
-
-
-const description=
-
-p.description||
-p.text||
-p.detail||
-p.説明||
-"説明なし";
-
+const description=p.desc || "説明なし";
 
 
 const html=`
@@ -511,7 +375,6 @@ productList.innerHTML="";
 
 products
 .filter(p=>p.name.toLowerCase().includes(word))
-
 .forEach(p=>{
 
 const card=document.createElement("div");
@@ -521,7 +384,6 @@ card.className="card";
 card.innerHTML=`
 
 <img src="${p.image||""}">
-
 <div>${p.name}</div>
 
 `;
