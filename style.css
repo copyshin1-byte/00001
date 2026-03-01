@@ -1,110 +1,220 @@
 *{
 box-sizing:border-box;
+margin:0;
+padding:0;
+font-family:"Noto Sans JP",sans-serif;
 }
 
 body{
-margin:0;
-font-family:Arial, sans-serif;
-background:#050510;
-color:#00ffff;
+background:
+radial-gradient(circle at 20% 20%,#111 0%,#020617 60%),
+linear-gradient(180deg,#020617,#000);
+color:#e5e7eb;
+min-height:100vh;
 }
 
-/* 上部バー */
+/* ヘッダー */
 
 .header{
+
 position:fixed;
 top:0;
 left:0;
 right:0;
+
 height:60px;
+
 display:flex;
 align-items:center;
 justify-content:center;
-background:#000000;
-border-bottom:2px solid #00ffff;
-box-shadow:0 0 20px #00ffff;
-z-index:100;
-}
 
-.logoText{
-font-size:22px;
-color:#00ffff;
-letter-spacing:3px;
-text-shadow:0 0 10px #00ffff;
-}
+background:#020617;
 
-/* メイン */
-
-.container{
-max-width:1200px;
-margin:80px auto;
-padding:10px;
-}
-
-/* カテゴリ */
-
-.categoryTitle{
-font-size:22px;
-margin:30px 0 10px;
-color:#ff00ff;
-text-shadow:0 0 10px #ff00ff;
-}
-
-/* 商品カード */
-
-.productCard{
-
-background:#000000;
-border:1px solid #00ffff;
-border-radius:10px;
-
-padding:10px;
-margin:10px;
+border-bottom:1px solid #00ffff55;
 
 box-shadow:
 0 0 10px #00ffff,
-inset 0 0 10px #00ffff;
+0 0 20px #8b5cf6;
 
-transition:0.3s;
+z-index:100;
 
 }
 
-.productCard:hover{
+.logoText{
+
+font-size:20px;
+
+color:#00ffff;
+
+text-shadow:
+0 0 10px #00ffff,
+0 0 20px #8b5cf6;
+
+}
+
+/* コンテナ */
+
+.container{
+
+max-width:1200px;
+
+margin:80px auto;
+
+padding:15px;
+
+}
+
+/* カード */
+
+.card{
+
+background:rgba(0,0,0,0.6);
+
+border:
+
+1px solid #00ffff;
+
+border-radius:12px;
+
+padding:15px;
+
+margin-bottom:20px;
 
 box-shadow:
-0 0 30px #ff00ff,
-inset 0 0 20px #ff00ff;
 
-transform:scale(1.03);
+0 0 10px #00ffff44;
+
+backdrop-filter:blur(6px);
+
+}
+
+/* タイトル */
+
+.title{
+
+font-size:22px;
+
+margin-bottom:10px;
+
+color:#8b5cf6;
+
+text-shadow:0 0 10px #8b5cf6;
+
+}
+
+/* 入力欄 */
+
+input,textarea{
+
+width:100%;
+
+padding:10px;
+
+margin-top:5px;
+
+margin-bottom:15px;
+
+border-radius:8px;
+
+border:1px solid #00ffff;
+
+background:#020617;
+
+color:#fff;
+
+outline:none;
+
+}
+
+input:focus,textarea:focus{
+
+box-shadow:
+
+0 0 10px #00ffff;
+
+}
+
+/* ボタン */
+
+button{
+
+padding:10px 20px;
+
+border-radius:10px;
+
+border:none;
+
+cursor:pointer;
+
+font-size:16px;
+
+background:
+
+linear-gradient(90deg,#00ffff,#8b5cf6);
+
+color:#000;
+
+font-weight:bold;
+
+transition:0.2s;
+
+}
+
+button:hover{
+
+transform:scale(1.05);
+
+box-shadow:
+
+0 0 10px #00ffff,
+0 0 20px #8b5cf6;
+
+}
+
+/* リスト */
+
+.item{
+
+background:#020617;
+
+border:1px solid #8b5cf6;
+
+padding:12px;
+
+margin-bottom:10px;
+
+border-radius:10px;
+
+box-shadow:
+
+0 0 8px #8b5cf655;
 
 }
 
 /* 画像 */
 
-.productImage{
+img{
 
-width:100%;
-border-radius:8px;
+max-width:100%;
+
+border-radius:10px;
+
+margin-top:10px;
+
 border:1px solid #00ffff;
 
 }
 
-/* 名前 */
+/* 動画 */
 
-.productName{
+video{
 
-font-size:18px;
-margin-top:8px;
+width:100%;
 
-color:#00ffff;
+margin-top:10px;
 
-}
+border-radius:10px;
 
-/* 説明 */
-
-.productDescription{
-
-font-size:14px;
-color:#aaaaaa;
+border:1px solid #00ffff;
 
 }
