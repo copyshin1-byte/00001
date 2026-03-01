@@ -336,9 +336,9 @@ font-size:17px;
 line-height:1.7;
 
 }
-  
-/* スマホ画像サイズ制限（追加のみ） */
-@media(max-width:700px){
+
+
+/* スマホ画像サイズ制限（追加部分） */
 
 .detail img{
 width:100%;
