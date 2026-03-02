@@ -582,4 +582,35 @@ height:250px;
 
 }
 
+/* ===== スマホだけ横スクロールカテゴリ ===== */
+
+@media(max-width:700px){
+
+.categories{
+
+overflow-x:auto;
+overflow-y:hidden;
+
+}
+
+#categoryList{
+
+display:flex;
+
+flex-wrap:nowrap;
+
+gap:12px;
+
+padding-bottom:10px;
+
+}
+
+.categoryBtn{
+
+flex:0 0 auto;
+
+min-width:140px;
+
+}
+
 }
