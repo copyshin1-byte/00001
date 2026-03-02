@@ -153,20 +153,37 @@ z-index:-1;
 }
 
 
+/* ===== 横スクロールカテゴリ ===== */
 
-.categories{width:250px;}
-.products{width:420px;}
-.detail{flex:1;}
+.categories{
 
+width:100%;
 
+overflow-x:auto;
 
-/* カテゴリ */
+white-space:nowrap;
+
+padding-bottom:10px;
+
+}
+
+/* 横並び */
+
+#categoryList{
+
+display:flex;
+
+gap:12px;
+
+}
+
+/* Steam風カード化 */
 
 .categoryBtn{
 
-padding:14px;
+flex:0 0 auto;
 
-margin:8px 0;
+min-width:150px;
 
 cursor:pointer;
 
@@ -178,7 +195,9 @@ border:1px solid #ff00ff33;
 
 display:flex;
 align-items:center;
-gap:12px;
+gap:10px;
+
+padding:12px;
 
 transition:.2s;
 
@@ -200,8 +219,8 @@ box-shadow:
 
 .categoryBtn img{
 
-width:42px;
-height:42px;
+width:40px;
+height:40px;
 
 border-radius:10px;
 
@@ -210,6 +229,29 @@ object-fit:cover;
 border:1px solid #ff00ff66;
 
 }
+
+
+
+/* 横スクロールバー */
+
+.categories::-webkit-scrollbar{
+
+height:8px;
+
+}
+
+.categories::-webkit-scrollbar-thumb{
+
+background:#ff00ff;
+
+border-radius:10px;
+
+}
+
+
+
+.products{width:420px;}
+.detail{flex:1;}
 
 
 
@@ -368,7 +410,6 @@ margin-top:15px;
 .detail iframe{
 
 width:100%;
-
 height:350px;
 
 margin-top:15px;
@@ -505,25 +546,16 @@ margin-top:70px;
 
 }
 
-.categories,
 .products{
-
 width:100%;
-
 }
-
 
 .detail{
-
 display:none;
-
 }
 
-
 .modal iframe{
-
 height:250px;
-
 }
 
 }
