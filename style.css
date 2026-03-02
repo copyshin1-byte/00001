@@ -8,20 +8,20 @@ body{
 
 font-family:"Noto Sans JP",sans-serif;
 
-color:#eafaff;
+color:#eae6ff;
 
 background:
 linear-gradient(
-120deg,
-#020617,
-#000814,
-#001020,
-#020617
+130deg,
+#020012,
+#080018,
+#020012,
+#000
 );
 
 background-size:400% 400%;
 
-animation:bgmove 25s ease infinite;
+animation:bgmove 20s ease infinite;
 
 min-height:100vh;
 
@@ -53,9 +53,9 @@ justify-content:center;
 
 background:#000;
 
-border-bottom:1px solid #00eaff55;
+border-bottom:1px solid #ff00ff55;
 
-box-shadow:0 0 40px #00eaff33;
+box-shadow:0 0 40px #ff00ff55;
 
 z-index:100;
 
@@ -64,10 +64,10 @@ z-index:100;
 
 .logoText{
 
-font-size:22px;
+font-size:24px;
 font-weight:bold;
 
-background:linear-gradient(90deg,#00eaff,#00ff9d);
+background:linear-gradient(90deg,#ff00ff,#8a2bff);
 
 -webkit-background-clip:text;
 
@@ -82,10 +82,13 @@ color:transparent;
 .container{
 
 max-width:1400px;
+
 margin:80px auto;
+
 padding:15px;
 
 display:flex;
+
 gap:20px;
 
 }
@@ -98,16 +101,21 @@ gap:20px;
 
 position:relative;
 
-background:rgba(0,0,0,.85);
+background:rgba(0,0,30,.85);
 
-border-radius:16px;
+border-radius:18px;
 
 padding:16px;
 
 overflow:hidden;
 
+box-shadow:
+0 0 40px #ff00ff22;
+
 }
 
+
+/* ネオン枠 */
 
 .panel::before{
 
@@ -121,16 +129,16 @@ background:
 
 linear-gradient(
 60deg,
-#00eaff,
-#00ff9d,
-#00eaff
+#ff00ff,
+#8a2bff,
+#ff00ff
 );
 
 background-size:300%;
 
-animation:neonMove 6s linear infinite;
+animation:neonMove 5s linear infinite;
 
-filter:blur(8px);
+filter:blur(10px);
 
 z-index:-1;
 
@@ -156,47 +164,50 @@ z-index:-1;
 
 .categoryBtn{
 
-padding:12px;
-margin:6px 0;
+padding:14px;
+
+margin:8px 0;
 
 cursor:pointer;
 
-border-radius:10px;
+border-radius:12px;
 
-background:#020617;
+background:#020020;
 
-border:1px solid #00eaff33;
+border:1px solid #ff00ff33;
 
 display:flex;
 align-items:center;
-gap:10px;
+gap:12px;
+
+transition:.2s;
 
 }
 
 
 .categoryBtn:hover{
 
-background:#001020;
+background:#080030;
 
-box-shadow:0 0 20px #00eaff55;
+box-shadow:
+0 0 20px #ff00ff88;
 
 }
 
 
-/* カテゴリアイコンサイズ修正版 */
+
+/* カテゴリアイコン */
 
 .categoryBtn img{
 
-width:40px;
-height:40px;
+width:42px;
+height:42px;
 
-border-radius:8px;
+border-radius:10px;
 
 object-fit:cover;
 
-border:1px solid #00eaff44;
-
-flex:0 0 auto;
+border:1px solid #ff00ff66;
 
 }
 
@@ -208,17 +219,28 @@ flex:0 0 auto;
 
 width:100%;
 
-padding:12px;
+padding:14px;
 
 margin-bottom:12px;
 
 background:#000;
 
-border:1px solid #00eaff55;
+border:1px solid #ff00ff66;
 
-color:#00eaff;
+color:#ff88ff;
 
-border-radius:10px;
+border-radius:12px;
+
+outline:none;
+
+}
+
+
+
+#searchBox:focus{
+
+box-shadow:
+0 0 15px #ff00ff88;
 
 }
 
@@ -229,24 +251,27 @@ border-radius:10px;
 .card{
 
 display:flex;
-gap:12px;
 
-padding:14px;
+gap:14px;
+
+padding:16px;
 
 margin-bottom:12px;
 
 cursor:pointer;
 
-border-radius:10px;
+border-radius:12px;
 
 background:
 linear-gradient(
 180deg,
-#001020,
-#000814
+#020020,
+#000010
 );
 
-border:1px solid #00eaff33;
+border:1px solid #ff00ff33;
+
+transition:.25s;
 
 }
 
@@ -256,14 +281,16 @@ border:1px solid #00eaff33;
 background:
 linear-gradient(
 180deg,
-#002030,
-#001020
+#080030,
+#020020
 );
 
-border:1px solid #00eaff;
+border:1px solid #ff00ff;
 
 box-shadow:
-0 0 30px #00eaff55;
+0 0 25px #ff00ff88;
+
+transform:translateY(-2px);
 
 }
 
@@ -274,11 +301,11 @@ box-shadow:
 width:90px;
 height:90px;
 
-border-radius:8px;
+border-radius:10px;
 
 object-fit:cover;
 
-border:1px solid #00eaff44;
+border:1px solid #ff00ff66;
 
 }
 
@@ -287,7 +314,10 @@ border:1px solid #00eaff44;
 .title{
 
 font-size:16px;
+
 font-weight:bold;
+
+color:#ffffff;
 
 }
 
@@ -299,13 +329,15 @@ font-weight:bold;
 
 white-space:pre-line;
 
-line-height:1.7;
+line-height:1.8;
+
+color:#ddd;
 
 }
 
 
 
-/* 詳細パネル */
+/* 詳細 */
 
 .detail{
 
@@ -321,11 +353,11 @@ min-height:500px;
 
 width:100%;
 
-border-radius:10px;
+border-radius:12px;
 
-border:1px solid #00eaff44;
+border:1px solid #ff00ff66;
 
-margin-top:10px;
+margin-top:15px;
 
 }
 
@@ -336,19 +368,20 @@ margin-top:10px;
 .detail iframe{
 
 width:100%;
-height:320px;
 
-margin-top:10px;
+height:350px;
 
-border-radius:10px;
+margin-top:15px;
 
-border:1px solid #00eaff44;
+border-radius:12px;
+
+border:1px solid #ff00ff66;
 
 }
 
 
 
-/* モーダル（PCスマホ共通） */
+/* モーダル */
 
 .modal{
 
@@ -360,9 +393,14 @@ left:0;
 width:100%;
 height:100%;
 
-background:#000814;
+background:
+linear-gradient(
+180deg,
+#020012,
+#000
+);
 
-padding:25px;
+padding:30px;
 
 display:none;
 
@@ -373,15 +411,16 @@ z-index:9999;
 }
 
 
+
 .modal img{
 
 width:100%;
 
-margin-top:10px;
+margin-top:20px;
 
-border-radius:10px;
+border-radius:12px;
 
-border:1px solid #00eaff44;
+border:1px solid #ff00ff66;
 
 }
 
@@ -390,13 +429,13 @@ border:1px solid #00eaff44;
 
 width:100%;
 
-height:400px;
+height:420px;
 
-margin-top:10px;
+margin-top:20px;
 
-border-radius:10px;
+border-radius:12px;
 
-border:1px solid #00eaff44;
+border:1px solid #ff00ff66;
 
 }
 
@@ -406,19 +445,31 @@ border:1px solid #00eaff44;
 
 .closeBtn{
 
-margin-bottom:15px;
+margin-bottom:20px;
 
-padding:10px 20px;
+padding:12px 24px;
 
-border-radius:10px;
+border-radius:12px;
 
-border:1px solid #00eaff55;
+border:1px solid #ff00ff;
 
 background:#000;
 
-color:#00eaff;
+color:#ff88ff;
 
 cursor:pointer;
+
+font-size:16px;
+
+transition:.2s;
+
+}
+
+
+.closeBtn:hover{
+
+box-shadow:
+0 0 20px #ff00ff;
 
 }
 
@@ -434,7 +485,7 @@ width:8px;
 
 ::-webkit-scrollbar-thumb{
 
-background:#00eaff;
+background:#ff00ff;
 
 border-radius:10px;
 
@@ -454,7 +505,6 @@ margin-top:70px;
 
 }
 
-
 .categories,
 .products{
 
@@ -463,16 +513,12 @@ width:100%;
 }
 
 
-/* PC用説明は非表示 */
-
 .detail{
 
 display:none;
 
 }
 
-
-/* 動画高さ */
 
 .modal iframe{
 
