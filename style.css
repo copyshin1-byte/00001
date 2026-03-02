@@ -153,31 +153,53 @@ z-index:-1;
 }
 
 
-/* ===== 横スクロールカテゴリ ===== */
+
+/* ===== PC比率固定（重要） ===== */
 
 .categories{
 
-width:100%;
+width:260px;
+min-width:260px;
+max-width:260px;
 
 overflow-x:auto;
-
-white-space:nowrap;
+overflow-y:hidden;
 
 padding-bottom:10px;
 
 }
 
-/* 横並び */
+.products{
+
+width:420px;
+min-width:420px;
+
+}
+
+.detail{
+
+flex:1;
+min-width:300px;
+
+}
+
+
+
+/* 横並びカテゴリ */
 
 #categoryList{
 
 display:flex;
 
+flex-wrap:wrap;
+
 gap:12px;
 
 }
 
-/* Steam風カード化 */
+
+
+/* カテゴリボタン */
 
 .categoryBtn{
 
@@ -250,11 +272,6 @@ border-radius:10px;
 
 
 
-.products{width:420px;}
-.detail{flex:1;}
-
-
-
 /* 検索 */
 
 #searchBox{
@@ -276,7 +293,6 @@ border-radius:12px;
 outline:none;
 
 }
-
 
 
 #searchBox:focus{
@@ -469,7 +485,6 @@ border:1px solid #ff00ff66;
 .modal iframe{
 
 width:100%;
-
 height:420px;
 
 margin-top:20px;
@@ -534,7 +549,7 @@ border-radius:10px;
 
 
 
-/* スマホ */
+/* ===== スマホ ===== */
 
 @media(max-width:700px){
 
@@ -546,16 +561,25 @@ margin-top:70px;
 
 }
 
+.categories,
 .products{
+
 width:100%;
+min-width:100%;
+max-width:100%;
+
 }
 
 .detail{
+
 display:none;
+
 }
 
 .modal iframe{
+
 height:250px;
+
 }
 
 }
