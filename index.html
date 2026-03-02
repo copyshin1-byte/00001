@@ -47,6 +47,16 @@ oninput="searchAll()">
 </div>
 
 
+
+<div class="panel detail">
+
+<h3>商品説明</h3>
+
+<div id="productDetail"></div>
+
+</div>
+
+
 </div>
 
 
@@ -89,11 +99,18 @@ let currentCategory=null;
 
 const categoryList=document.getElementById("categoryList");
 const productList=document.getElementById("productList");
+const detail=document.getElementById("productDetail");
 const modal=document.getElementById("modal");
 
 
+function getCategoryImage(c){
 
-/* カテゴリ表示（画像対応） */
+return c.img || c.image || "";
+
+}
+
+
+/* カテゴリ */
 
 function renderCategories(){
 
@@ -108,7 +125,10 @@ div.className="categoryBtn";
 div.onclick=()=>{
 
 currentCategory=c.name;
+
 renderProducts();
+
+detail.innerHTML="";
 
 };
 
@@ -116,8 +136,8 @@ div.innerHTML=`
 
 <div style="display:flex;align-items:center;gap:10px">
 
-<img src="${c.img||""}"
-style="width:40px;height:40px;border-radius:6px">
+<img src="${getCategoryImage(c)}"
+onerror="this.style.display='none'">
 
 <span>${c.name}</span>
 
@@ -132,8 +152,7 @@ categoryList.appendChild(div);
 }
 
 
-
-/* 商品表示 */
+/* 商品一覧 */
 
 function renderProducts(){
 
@@ -141,7 +160,6 @@ productList.innerHTML="";
 
 products
 .filter(p=>p.category===currentCategory)
-
 .forEach(p=>{
 
 const div=document.createElement("div");
@@ -152,7 +170,8 @@ div.onclick=()=>showDetail(p);
 
 div.innerHTML=`
 
-<img src="${p.image||""}">
+<img src="${p.image||""}"
+onerror="this.style.display='none'">
 
 <div class="title">
 
@@ -167,7 +186,6 @@ productList.appendChild(div);
 });
 
 }
-
 
 
 /* 検索 */
@@ -207,7 +225,8 @@ div.onclick=()=>showDetail(p);
 
 div.innerHTML=`
 
-<img src="${p.image||""}">
+<img src="${p.image||""}"
+onerror="this.style.display='none'">
 
 <div class="title">
 
@@ -224,26 +243,18 @@ productList.appendChild(div);
 }
 
 
-
 /* 説明表示 */
 
 function showDetail(p){
 
 let html=`
 
-<div style="max-width:900px;margin:auto">
-
-<button onclick="closeModal()"
-style="margin-bottom:20px;padding:10px 20px">
-
-閉じる
-
-</button>
-
-<h1>${p.name}</h1>
+<h2>${p.name}</h2>
 
 <div class="desc">
+
 ${p.desc||""}
+
 </div>
 
 `;
@@ -254,14 +265,37 @@ html+=`<img src="${p.image}">`;
 if(p.video)
 html+=`<iframe src="${p.video}" allowfullscreen></iframe>`;
 
-html+=`</div>`;
 
-modal.innerHTML=html;
+/* PC */
+
+if(window.innerWidth>700){
+
+detail.innerHTML=html;
+
+}
+
+/* スマホ */
+
+else{
+
+modal.innerHTML=`
+
+<button class="closeBtn"
+onclick="closeModal()">
+
+閉じる
+
+</button>
+
+${html}
+
+`;
 
 modal.style.display="block";
 
 }
 
+}
 
 
 window.closeModal=function(){
@@ -269,7 +303,6 @@ window.closeModal=function(){
 modal.style.display="none";
 
 }
-
 
 
 /* Firebase */
