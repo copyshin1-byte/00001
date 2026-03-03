@@ -1,193 +1,614 @@
-/* ============================= */
-/* 🔥 ULTRA CYBER CITY BACKGROUND */
-/* ============================= */
-
 *{
 box-sizing:border-box;
 margin:0;
 padding:0;
 }
 
-html,body{
-height:100%;
-min-height:100vh;
-}
-
 body{
+
 font-family:"Noto Sans JP",sans-serif;
+
 color:#eae6ff;
-overflow-x:hidden;
 
-/* ===== ベース背景 ===== */
 background:
-radial-gradient(circle at 20% 30%, #2a0055 0%, transparent 40%),
-radial-gradient(circle at 80% 70%, #001f44 0%, transparent 40%),
-linear-gradient(180deg,#050010,#02000a);
+linear-gradient(
+130deg,
+#020012,
+#080018,
+#020012,
+#000
+);
 
-background-attachment:fixed;
-position:relative;
+background-size:400% 400%;
+
+animation:bgmove 20s ease infinite;
+
+min-height:100vh;
+
 }
 
-/* ============================= */
-/* 🌆 都市画像レイヤー */
-/* ============================= */
+@keyframes bgmove{
 
-body::before{
-content:"";
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-z-index:-3;
-background:
-linear-gradient(rgba(0,0,0,.5),rgba(0,0,0,.7)),
-url("cybercity.png");
-background-size:cover;
-background-position:center;
-background-repeat:no-repeat;
-filter:contrast(1.2) brightness(.9) saturate(1.3);
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+
 }
 
-/* ============================= */
-/* 🌫 ネオン霧 */
-/* ============================= */
 
-body::after{
-content:"";
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-z-index:-2;
-pointer-events:none;
-background:
-radial-gradient(circle at 30% 40%, rgba(255,0,255,.25), transparent 50%),
-radial-gradient(circle at 70% 60%, rgba(0,255,255,.2), transparent 50%);
-animation:fogMove 20s ease-in-out infinite alternate;
-mix-blend-mode:screen;
-}
-
-@keyframes fogMove{
-0%{transform:translateY(-10px);}
-100%{transform:translateY(20px);}
-}
-
-/* ============================= */
-/* 🌧 雨 */
-/* ============================= */
-
-.rain{
-pointer-events:none;
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-z-index:-1;
-background-image:
-linear-gradient(rgba(255,255,255,.2) 1px, transparent 1px);
-background-size:2px 25px;
-animation:rain 0.6s linear infinite;
-opacity:.15;
-}
-
-@keyframes rain{
-0%{background-position:0 -100px;}
-100%{background-position:0 100px;}
-}
-
-/* ============================= */
-/* ⚡ 稲妻 */
-/* ============================= */
-
-.lightning{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:white;
-opacity:0;
-pointer-events:none;
-z-index:-1;
-animation:flash 12s infinite;
-}
-
-@keyframes flash{
-0%,97%,100%{opacity:0;}
-98%{opacity:.8;}
-99%{opacity:0;}
-}
-
-/* ============================= */
-/* 💡 ネオン光ゆらぎ */
-/* ============================= */
+/* ヘッダー */
 
 .header{
+
 position:fixed;
 top:0;
 left:0;
 right:0;
-height:70px;
+
+height:65px;
+
 display:flex;
 align-items:center;
 justify-content:center;
+
 background:#000;
+
 border-bottom:1px solid #ff00ff55;
-box-shadow:0 0 25px #ff00ff88;
-z-index:1000;
-animation:glow 3s infinite alternate;
+
+box-shadow:0 0 40px #ff00ff55;
+
+z-index:100;
+
 }
 
-@keyframes glow{
-0%{box-shadow:0 0 15px #ff00ff55;}
-100%{box-shadow:0 0 35px #00f0ff88;}
-}
 
 .logoText{
+
 font-size:24px;
 font-weight:bold;
-background:linear-gradient(90deg,#ff00ff,#00f0ff);
+
+background:linear-gradient(90deg,#ff00ff,#8a2bff);
+
 -webkit-background-clip:text;
+
 color:transparent;
+
 }
 
-/* ============================= */
-/* LAYOUT FIX */
-/* ============================= */
+
+
+/* レイアウト */
 
 .container{
+
 max-width:1400px;
-margin:120px auto 60px auto;
-padding:20px;
+
+margin:80px auto;
+
+padding:15px;
+
 display:flex;
+
 gap:20px;
+
 }
+
+
+
+/* パネル */
 
 .panel{
-background:rgba(0,0,40,.75);
-border-radius:16px;
+
+position:relative;
+
+background:rgba(0,0,30,.85);
+
+border-radius:18px;
+
 padding:16px;
-backdrop-filter:blur(6px);
-box-shadow:0 0 30px #000;
+
 overflow:hidden;
+
+box-shadow:
+0 0 40px #ff00ff22;
+
 }
 
-/* ============================= */
-/* MOBILE FIX */
-/* ============================= */
+
+/* ネオン枠 */
+
+.panel::before{
+
+content:"";
+
+position:absolute;
+
+inset:-2px;
+
+background:
+
+linear-gradient(
+60deg,
+#ff00ff,
+#8a2bff,
+#ff00ff
+);
+
+background-size:300%;
+
+animation:neonMove 5s linear infinite;
+
+filter:blur(10px);
+
+z-index:-1;
+
+}
+
+
+@keyframes neonMove{
+
+0%{background-position:0%;}
+100%{background-position:300%;}
+
+}
+
+
+
+/* ===== PC比率固定（重要） ===== */
+
+.categories{
+
+width:260px;
+min-width:260px;
+max-width:260px;
+
+overflow-x:auto;
+overflow-y:hidden;
+
+padding-bottom:10px;
+
+}
+
+.products{
+
+width:420px;
+min-width:420px;
+
+}
+
+.detail{
+
+flex:1;
+min-width:300px;
+
+}
+
+
+
+/* 横並びカテゴリ */
+
+#categoryList{
+
+display:flex;
+
+flex-wrap:wrap;
+
+gap:12px;
+
+}
+
+
+
+/* カテゴリボタン */
+
+.categoryBtn{
+
+flex:0 0 auto;
+
+min-width:150px;
+
+cursor:pointer;
+
+border-radius:12px;
+
+background:#020020;
+
+border:1px solid #ff00ff33;
+
+display:flex;
+align-items:center;
+gap:10px;
+
+padding:12px;
+
+transition:.2s;
+
+}
+
+
+.categoryBtn:hover{
+
+background:#080030;
+
+box-shadow:
+0 0 20px #ff00ff88;
+
+}
+
+
+
+/* カテゴリアイコン */
+
+.categoryBtn img{
+
+width:40px;
+height:40px;
+
+border-radius:10px;
+
+object-fit:cover;
+
+border:1px solid #ff00ff66;
+
+}
+
+
+
+/* 横スクロールバー */
+
+.categories::-webkit-scrollbar{
+
+height:8px;
+
+}
+
+.categories::-webkit-scrollbar-thumb{
+
+background:#ff00ff;
+
+border-radius:10px;
+
+}
+
+
+
+/* 検索 */
+
+#searchBox{
+
+width:100%;
+
+padding:14px;
+
+margin-bottom:12px;
+
+background:#000;
+
+border:1px solid #ff00ff66;
+
+color:#ff88ff;
+
+border-radius:12px;
+
+outline:none;
+
+}
+
+
+#searchBox:focus{
+
+box-shadow:
+0 0 15px #ff00ff88;
+
+}
+
+
+
+/* 商品カード */
+
+.card{
+
+display:flex;
+
+gap:14px;
+
+padding:16px;
+
+margin-bottom:12px;
+
+cursor:pointer;
+
+border-radius:12px;
+
+background:
+linear-gradient(
+180deg,
+#020020,
+#000010
+);
+
+border:1px solid #ff00ff33;
+
+transition:.25s;
+
+}
+
+
+.card:hover{
+
+background:
+linear-gradient(
+180deg,
+#080030,
+#020020
+);
+
+border:1px solid #ff00ff;
+
+box-shadow:
+0 0 25px #ff00ff88;
+
+transform:translateY(-2px);
+
+}
+
+
+
+.card img{
+
+width:90px;
+height:90px;
+
+border-radius:10px;
+
+object-fit:cover;
+
+border:1px solid #ff00ff66;
+
+}
+
+
+
+.title{
+
+font-size:16px;
+
+font-weight:bold;
+
+color:#ffffff;
+
+}
+
+
+
+/* 説明 */
+
+.desc{
+
+white-space:pre-line;
+
+line-height:1.8;
+
+color:#ddd;
+
+}
+
+
+
+/* 詳細 */
+
+.detail{
+
+min-height:500px;
+
+}
+
+
+
+/* 詳細画像 */
+
+.detail img{
+
+width:100%;
+
+border-radius:12px;
+
+border:1px solid #ff00ff66;
+
+margin-top:15px;
+
+}
+
+
+
+/* 動画 */
+
+.detail iframe{
+
+width:100%;
+height:350px;
+
+margin-top:15px;
+
+border-radius:12px;
+
+border:1px solid #ff00ff66;
+
+}
+
+
+
+/* モーダル */
+
+.modal{
+
+position:fixed;
+
+top:0;
+left:0;
+
+width:100%;
+height:100%;
+
+background:
+linear-gradient(
+180deg,
+#020012,
+#000
+);
+
+padding:30px;
+
+display:none;
+
+overflow:auto;
+
+z-index:9999;
+
+}
+
+
+
+.modal img{
+
+width:100%;
+
+margin-top:20px;
+
+border-radius:12px;
+
+border:1px solid #ff00ff66;
+
+}
+
+
+.modal iframe{
+
+width:100%;
+height:420px;
+
+margin-top:20px;
+
+border-radius:12px;
+
+border:1px solid #ff00ff66;
+
+}
+
+
+
+/* 閉じるボタン */
+
+.closeBtn{
+
+margin-bottom:20px;
+
+padding:12px 24px;
+
+border-radius:12px;
+
+border:1px solid #ff00ff;
+
+background:#000;
+
+color:#ff88ff;
+
+cursor:pointer;
+
+font-size:16px;
+
+transition:.2s;
+
+}
+
+
+.closeBtn:hover{
+
+box-shadow:
+0 0 20px #ff00ff;
+
+}
+
+
+
+/* スクロールバー */
+
+::-webkit-scrollbar{
+
+width:8px;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+background:#ff00ff;
+
+border-radius:10px;
+
+}
+
+
+
+/* ===== スマホ ===== */
 
 @media(max-width:700px){
 
 .container{
+
 flex-direction:column;
-margin-top:100px;
+
+margin-top:70px;
+
 }
 
-body{
-background-attachment:scroll;
+.categories,
+.products{
+
+width:100%;
+min-width:100%;
+max-width:100%;
+
+}
+
+/* スマホだけ横スクロールカテゴリ */
+
+.categories{
+
+overflow-x:auto;
+overflow-y:hidden;
+
+}
+
+#categoryList{
+
+display:flex;
+
+flex-wrap:nowrap;
+
+gap:12px;
+
+padding-bottom:10px;
+
+}
+
+.categoryBtn{
+
+flex:0 0 auto;
+
+min-width:140px;
+
+}
+
+.detail{
+
+display:none;
+
+}
+
+.modal iframe{
+
+height:250px;
+
 }
 
 }
