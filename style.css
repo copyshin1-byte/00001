@@ -1,23 +1,4 @@
 /* ============================= */
-/*  CYBER CITY (REAL IMAGE) + RAIN GIF  */
-/*  CSS ONLY / FULL REPLACE OK    */
-/* ============================= */
-
-/* ===== ここだけ差し替え ===== */
-:root{
-/* 背景のサイバーシティ画像（直リンク） */
---city-bg: url("https://drive.google.com/file/d/1LEX2KxTtFjmrsEzGv9NuIpQFY3s2HD-1/view?usp=drivesdk");
-
-/* 透明背景の雨GIF（直リンク推奨） */
---rain-gif: url("content://media/external/downloads/1000007486");
-
-/* 雰囲気の色（必要ならGitHubでここだけ変更） */
---neon-pink: #ff00ff;
---neon-cyan: #00ffff;
---deep: #060010;
-}
-
-/* ============================= */
 /* RESET */
 /* ============================= */
 
@@ -34,21 +15,28 @@ min-height:100vh;
 position:relative;
 overflow-x:hidden;
 
-/* ✅ リアル背景画像＋ネオン霧オーバーレイ */
+/* ネオン夜空 */
 background:
-radial-gradient(circle at 30% 20%, rgba(180,0,255,.30), transparent 45%),
-radial-gradient(circle at 70% 25%, rgba(0,255,255,.22), transparent 40%),
-linear-gradient(180deg, rgba(20,0,40,.55) 0%, rgba(6,0,16,.72) 55%, rgba(0,0,0,.88) 100%),
-var(--city-bg);
-background-size: cover, cover, cover, cover;
-background-position: 50% 50%, 50% 50%, 50% 50%, 50% 50%;
-background-repeat:no-repeat;
-background-attachment: fixed, fixed, fixed, fixed;
-background-color: var(--deep);
+radial-gradient(circle at 30% 20%, rgba(180,0,255,.35), transparent 45%),
+radial-gradient(circle at 70% 25%, rgba(0,255,255,.25), transparent 40%),
+linear-gradient(180deg,#14001f 0%,#0b0014 40%,#060010 100%);
+background-attachment:fixed;
+
+animation:lightningFlash 8s infinite;
 }
 
 /* ============================= */
-/* 🌧 雨GIF（GIFそのものが動く） */
+/* ⚡ 稲妻 */
+/* ============================= */
+
+@keyframes lightningFlash{
+0%,97%,100%{background-color:transparent;}
+98%{background-color:rgba(255,255,255,.15);}
+99%{background-color:rgba(255,255,255,.35);}
+}
+
+/* ============================= */
+/* 🌧 雨 */
 /* ============================= */
 
 body::before{
@@ -56,169 +44,92 @@ content:"";
 position:fixed;
 inset:-20%;
 pointer-events:none;
-z-index:-2;
+z-index:-3;
 
-/* 雨GIFを全面に敷く + 少しだけドリフト（パララックス風） */
-background-image: var(--rain-gif);
-background-size: 520px auto;         /* 雨の密度：大きいほど粗く、小さいほど密 */
-background-repeat: repeat;
-background-position: 0 0;
+background:
+repeating-linear-gradient(
+100deg,
+rgba(255,255,255,.25) 0px,
+rgba(255,255,255,.25) 2px,
+transparent 3px,
+transparent 15px
+);
 
-opacity:.75;
-mix-blend-mode: screen;
-filter: blur(.2px) saturate(1.1);
-
-animation: rainDrift 3.2s linear infinite;
+animation:rain 0.8s linear infinite;
+mix-blend-mode:screen;
+opacity:.8;
 }
 
-/* 雨の“流れ”はGIFに任せつつ、全体を少し動かして奥行き感 */
-@keyframes rainDrift{
-0%{transform:translate3d(0,-2%,0) skewX(-6deg);}
-100%{transform:translate3d(0, 2%,0) skewX(-6deg);}
+@keyframes rain{
+0%{transform:translateY(-10%);}
+100%{transform:translateY(10%);}
 }
 
 /* ============================= */
-/* ⚡ 稲妻 + 🌊 反射 + 🚁 ドローン + 💡 霧チラつき */
-/* 1枚の ::after に多重レイヤーで全部詰める */
+/* 🌆 都市 */
 /* ============================= */
 
 body::after{
 content:"";
 position:fixed;
-inset:0;
+bottom:0;
+left:0;
+width:100%;
+height:65%;
 pointer-events:none;
-z-index:-1;
+z-index:-2;
 
-/* レイヤー順（上→下）
-  1) ドローン（小さいSVG）
-  2) 稲妻フラッシュ（白い放射）
-  3) ネオン霧（呼吸）
-  4) 水面反射（下部だけ強め）
-*/
-background-image:
-/* 1) drone */
-url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='26' viewBox='0 0 80 26'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='0'%3E%3Cstop offset='0' stop-color='%23ff00ff'/%3E%3Cstop offset='1' stop-color='%2300ffff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='10' y='9' width='60' height='8' rx='8' fill='url(%23g)' opacity='.85'/%3E%3Ccircle cx='12' cy='13' r='5' fill='%23ffffff' opacity='.15'/%3E%3Ccircle cx='68' cy='13' r='5' fill='%23ffffff' opacity='.12'/%3E%3Crect x='36' y='6' width='8' height='14' rx='4' fill='%23000000' opacity='.25'/%3E%3C/svg%3E"),
-/* 2) lightning */
-radial-gradient(circle at 55% 18%, rgba(255,255,255,.55), transparent 35%),
-/* 3) neon fog */
-radial-gradient(circle at 28% 22%, rgba(255,0,255,.14), transparent 55%),
-radial-gradient(circle at 72% 26%, rgba(0,255,255,.12), transparent 58%),
-/* 4) water reflection */
-linear-gradient(180deg, transparent 0%, transparent 60%, rgba(255,0,255,.12) 72%, rgba(0,255,255,.10) 82%, rgba(0,0,0,.55) 100%);
+background:
 
-background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+linear-gradient(to top,
+rgba(0,0,0,.95) 0%,
+rgba(0,0,0,.85) 40%,
+transparent 100%
+),
 
-/* 初期位置（ドローンは左外からスタート） */
-background-position:
--20% 22%,
-55% 18%,
-28% 22%,
-72% 26%,
-0 0;
+linear-gradient(
+90deg,
+transparent 0%,
+rgba(0,0,0,.85) 5%,
+transparent 10%,
+transparent 18%,
+rgba(0,0,0,.8) 20%,
+transparent 28%,
+rgba(0,0,0,.9) 35%,
+transparent 45%,
+rgba(0,0,0,.85) 50%,
+transparent 60%,
+rgba(0,0,0,.8) 65%,
+transparent 75%,
+rgba(0,0,0,.9) 80%,
+transparent 90%
+),
 
-/* サイズ（ドローン小さめ、稲妻は広め） */
-background-size:
-80px 26px,
-120% 120%,
-140% 140%,
-140% 140%,
-100% 100%;
+repeating-linear-gradient(
+0deg,
+transparent 0px,
+transparent 8px,
+rgba(255,0,255,.25) 8px,
+rgba(255,0,255,.25) 10px
+),
+repeating-linear-gradient(
+90deg,
+transparent 0px,
+transparent 12px,
+rgba(0,255,255,.2) 12px,
+rgba(0,255,255,.2) 14px
+);
 
-opacity:1;
-filter: saturate(1.08) contrast(1.05);
-
-/* ここで全部アニメ */
-animation: cyberOverlay 10.5s linear infinite;
+background-repeat:no-repeat;
+filter:blur(0.6px);
+opacity:.95;
+animation:windowFlicker 3s infinite alternate;
 }
 
-/* ドローン移動（横断） + 稲妻（瞬間） + 霧（チラつき） */
-@keyframes cyberOverlay{
-/* 通常 */
-0%{
-background-position:
--20% 22%,
-55% 18%,
-28% 22%,
-72% 26%,
-0 0;
-opacity:1;
-filter:saturate(1.08) contrast(1.05);
-}
-
-/* ドローン中盤 */
-35%{
-background-position:
-45% 24%,
-55% 18%,
-28% 22%,
-72% 26%,
-0 0;
-opacity:1;
-}
-
-/* 稲妻フラッシュ（短く2回） */
-72%{
-background-position:
-85% 20%,
-55% 18%,
-28% 22%,
-72% 26%,
-0 0;
-opacity:1;
-}
-74%{
-/* フラッシュ */
-background-position:
-95% 21%,
-55% 18%,
-28% 22%,
-72% 26%,
-0 0;
-opacity:1;
-filter:saturate(1.15) contrast(1.15);
-}
-75%{
-/* もっと強い瞬間 */
-background-position:
-110% 22%,
-55% 18%,
-28% 22%,
-72% 26%,
-0 0;
-opacity:1;
-filter:saturate(1.25) contrast(1.25);
-}
-76%{
-/* 戻る */
-background-position:
-110% 22%,
-55% 18%,
-28% 22%,
-72% 26%,
-0 0;
-opacity:1;
-filter:saturate(1.08) contrast(1.05);
-}
-
-/* 霧のチラつき（呼吸） */
-90%{
-background-position:
-110% 22%,
-55% 18%,
-26% 23%,
-74% 27%,
-0 0;
-opacity:.98;
-}
-100%{
-background-position:
-120% 22%,
-55% 18%,
-28% 22%,
-72% 26%,
-0 0;
-opacity:1;
-}
+@keyframes windowFlicker{
+0%{opacity:.95;}
+50%{opacity:.85;}
+100%{opacity:.98;}
 }
 
 /* ============================= */
@@ -234,9 +145,9 @@ height:65px;
 display:flex;
 align-items:center;
 justify-content:center;
-background:linear-gradient(rgba(10,0,21,.85),rgba(0,0,0,.95));
-border-bottom:1px solid rgba(255,0,255,.45);
-box-shadow:0 0 25px rgba(255,0,255,.20);
+background:linear-gradient(#0a0015,#000);
+border-bottom:1px solid #ff00ff66;
+box-shadow:0 0 25px #ff00ff33;
 z-index:100;
 }
 
@@ -244,7 +155,7 @@ z-index:100;
 font-size:22px;
 font-weight:700;
 letter-spacing:4px;
-background:linear-gradient(90deg,var(--neon-pink),var(--neon-cyan));
+background:linear-gradient(90deg,#ff00ff,#00ffff);
 -webkit-background-clip:text;
 color:transparent;
 }
@@ -266,18 +177,18 @@ gap:20px;
 /* ============================= */
 
 .panel{
-background:rgba(20,0,40,.68);
+background:rgba(20,0,40,.75);
 border-radius:14px;
 padding:16px;
-border:1px solid rgba(255,0,255,.25);
-box-shadow:0 0 20px rgba(0,0,0,.65);
-backdrop-filter:blur(8px);
+border:1px solid #ff00ff33;
+box-shadow:0 0 20px #000;
+backdrop-filter:blur(6px);
 transition:.2s;
 }
 
 .panel:hover{
-border:1px solid rgba(255,0,255,.55);
-box-shadow:0 0 28px rgba(255,0,255,.18);
+border:1px solid #ff00ff;
+box-shadow:0 0 25px #ff00ff33;
 }
 
 /* ============================= */
@@ -294,7 +205,7 @@ overflow-y:hidden;
 .detail{flex:1;}
 
 /* ============================= */
-/* ✅ カテゴリ横スクロール */
+/* 🔥 横スクロールカテゴリ */
 /* ============================= */
 
 #categoryList{
@@ -307,11 +218,10 @@ gap:12px;
 flex:0 0 auto;
 min-width:140px;
 padding:10px 14px;
-margin:0;
 cursor:pointer;
 border-radius:10px;
-background:rgba(0,0,0,.38);
-border:1px solid rgba(255,0,255,.22);
+background:rgba(0,0,0,.4);
+border:1px solid #ff00ff33;
 display:flex;
 align-items:center;
 gap:10px;
@@ -320,8 +230,8 @@ white-space:nowrap;
 }
 
 .categoryBtn:hover{
-border:1px solid rgba(255,0,255,.6);
-box-shadow:0 0 15px rgba(255,0,255,.30);
+border:1px solid #ff00ff;
+box-shadow:0 0 15px #ff00ff55;
 transform:translateY(-2px);
 }
 
@@ -332,17 +242,19 @@ border-radius:6px;
 object-fit:cover;
 }
 
-/* 横スクロールバー（カテゴリ） */
+/* 横スクロールバー */
+
 .categories::-webkit-scrollbar{
 height:6px;
 }
+
 .categories::-webkit-scrollbar-thumb{
-background:rgba(255,0,255,.75);
+background:#ff00ff;
 border-radius:10px;
 }
 
 /* ============================= */
-/* PRODUCT CARD */
+/* CARD */
 /* ============================= */
 
 .card{
@@ -352,14 +264,14 @@ padding:12px;
 margin-bottom:12px;
 cursor:pointer;
 border-radius:12px;
-background:rgba(0,0,0,.45);
-border:1px solid rgba(255,0,255,.22);
+background:rgba(0,0,0,.5);
+border:1px solid #ff00ff33;
 transition:.2s;
 }
 
 .card:hover{
-border:1px solid rgba(255,0,255,.6);
-box-shadow:0 0 20px rgba(255,0,255,.30);
+border:1px solid #ff00ff;
+box-shadow:0 0 20px #ff00ff55;
 transform:translateY(-2px);
 }
 
@@ -373,12 +285,6 @@ object-fit:cover;
 .title{
 font-size:16px;
 font-weight:700;
-}
-
-.desc{
-white-space:pre-line;
-line-height:1.7;
-opacity:.92;
 }
 
 /* ============================= */
@@ -412,8 +318,9 @@ border:none;
 ::-webkit-scrollbar{
 width:8px;
 }
+
 ::-webkit-scrollbar-thumb{
-background:rgba(255,0,255,.75);
+background:#ff00ff;
 border-radius:10px;
 }
 
@@ -443,13 +350,8 @@ height:250px;
 
 }
 
-/* ============================= */
-/* Reduce Motion */
-/* ============================= */
-
 @media (prefers-reduced-motion: reduce){
-body::before,
-body::after{
+body::before{
 animation:none;
 }
 }
