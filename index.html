@@ -9,109 +9,102 @@
 <title>00001</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
-
 <link rel="stylesheet" href="style.css">
 
 </head>
 
 <body>
 
-
 <div class="header">
 <div class="logoText">00001</div>
 </div>
 
-
-
 <div class="container">
 
-
 <div class="panel categories">
-
 <h3>カテゴリ</h3>
-
 <div id="categoryList"></div>
-
 </div>
-
-
 
 <div class="panel products">
-
-<input id="searchBox"
-placeholder="検索"
-oninput="searchAll()">
-
+<input id="searchBox" placeholder="検索" oninput="searchAll()">
 <div id="productList"></div>
-
 </div>
-
-
 
 <div class="panel detail">
-
 <h3>商品説明</h3>
-
 <div id="productDetail"></div>
-
 </div>
 
-
 </div>
-
-
 
 <div id="modal" class="modal"></div>
 
-
-
 <script type="module">
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-
-import {
-getFirestore,
-collection,
-onSnapshot
-}
-from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDDhUgvH7o4SymhG3QVTRe6CDAlJM_Vk_A",
-  authDomain: "project-3088108151926999605.firebaseapp.com",
-  projectId: "project-3088108151926999605",
-  storageBucket: "project-3088108151926999605.firebasestorage.app",
-  messagingSenderId: "331871777494",
-  appId: "1:331871777494:web:8de28a405de387f7240f77"
+apiKey:"AIzaSyDDhUgvH7o4SymhG3QVTRe6CDAlJM_Vk_A",
+authDomain:"project-3088108151926999605.firebaseapp.com",
+projectId:"project-3088108151926999605",
+storageBucket:"project-3088108151926999605.firebasestorage.app",
+messagingSenderId:"331871777494",
+appId:"1:331871777494:web:8de28a405de387f7240f77"
 };
-
 
 const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
 
-
 let categories=[];
 let products=[];
 let currentCategory=null;
-
 
 const categoryList=document.getElementById("categoryList");
 const productList=document.getElementById("productList");
 const detail=document.getElementById("productDetail");
 const modal=document.getElementById("modal");
 
+/* ===== 動画URL自動変換 ===== */
 
-function getCategoryImage(c){
+function convertVideoUrl(url){
 
-return c.img || c.image || "";
+if(!url) return "";
 
+/* YouTube watch */
+if(url.includes("watch?v=")){
+return "https://www.youtube.com/embed/"+url.split("watch?v=")[1].split("&")[0];
 }
 
+/* youtu.be */
+if(url.includes("youtu.be/")){
+return "https://www.youtube.com/embed/"+url.split("youtu.be/")[1].split("?")[0];
+}
 
-/* カテゴリ */
+/* 既にembed */
+if(url.includes("youtube.com/embed/")){
+return url;
+}
+
+/* mp4など直リンク */
+if(url.match(/\.(mp4|webm|ogg)$/i)){
+return url;
+}
+
+/* Vimeo */
+if(url.includes("vimeo.com/")){
+return "https://player.vimeo.com/video/"+url.split("vimeo.com/")[1];
+}
+
+return url;
+}
+
+function getCategoryImage(c){
+return c.img || c.image || "";
+}
+
+/* カテゴリ描画 */
 
 function renderCategories(){
 
@@ -120,38 +113,25 @@ categoryList.innerHTML="";
 categories.forEach(c=>{
 
 const div=document.createElement("div");
-
 div.className="categoryBtn";
 
 div.onclick=()=>{
-
 currentCategory=c.name;
-
 renderProducts();
-
 detail.innerHTML="";
-
 };
 
 div.innerHTML=`
-
 <div style="display:flex;align-items:center;gap:10px">
-
-<img src="${getCategoryImage(c)}"
-onerror="this.style.display='none'">
-
+<img src="${getCategoryImage(c)}" onerror="this.style.display='none'">
 <span>${c.name}</span>
-
 </div>
-
 `;
 
 categoryList.appendChild(div);
 
 });
-
 }
-
 
 /* 商品一覧 */
 
@@ -164,168 +144,109 @@ products
 .forEach(p=>{
 
 const div=document.createElement("div");
-
 div.className="card";
-
 div.onclick=()=>showDetail(p);
 
 div.innerHTML=`
-
-<img src="${p.image||""}"
-onerror="this.style.display='none'">
-
-<div class="title">
-
-${p.name}
-
-</div>
-
+<img src="${p.image||""}" onerror="this.style.display='none'">
+<div class="title">${p.name}</div>
 `;
 
 productList.appendChild(div);
 
 });
-
 }
-
 
 /* 検索 */
 
 window.searchAll=function(){
 
-const q=document
-.getElementById("searchBox")
-.value
-.toLowerCase();
-
+const q=document.getElementById("searchBox").value.toLowerCase();
 
 productList.innerHTML="";
 
-
 products
-
 .filter(p=>
-
-p.category===currentCategory
-
-&&
-
-(p.name||"")
-.toLowerCase()
-.includes(q)
-
+p.category===currentCategory &&
+(p.name||"").toLowerCase().includes(q)
 )
-
 .forEach(p=>{
 
 const div=document.createElement("div");
-
 div.className="card";
-
 div.onclick=()=>showDetail(p);
 
 div.innerHTML=`
-
-<img src="${p.image||""}"
-onerror="this.style.display='none'">
-
-<div class="title">
-
-${p.name}
-
-</div>
-
+<img src="${p.image||""}" onerror="this.style.display='none'">
+<div class="title">${p.name}</div>
 `;
 
 productList.appendChild(div);
 
 });
-
 }
-
 
 /* 説明表示 */
 
 function showDetail(p){
 
 let html=`
-
 <h2>${p.name}</h2>
-
-<div class="desc">
-
-${p.desc||""}
-
-</div>
-
+<div class="desc">${(p.desc||"").replace(/\n/g,"<br>")}</div>
 `;
 
-if(p.image)
+/* 画像 */
+if(p.image){
 html+=`<img src="${p.image}">`;
+}
 
-if(p.video)
-html+=`<iframe src="${p.video}" allowfullscreen></iframe>`;
+/* 動画 */
+if(p.video){
 
+const v=convertVideoUrl(p.video);
+
+if(v.match(/\.(mp4|webm|ogg)$/i)){
+html+=`<video src="${v}" controls style="width:100%;margin-top:15px;"></video>`;
+}else{
+html+=`<iframe src="${v}" allowfullscreen style="width:100%;height:350px;margin-top:15px;border:none;"></iframe>`;
+}
+
+}
 
 /* PC */
-
 if(window.innerWidth>700){
-
 detail.innerHTML=html;
-
 }
 
 /* スマホ */
-
 else{
 
 modal.innerHTML=`
-
-<button class="closeBtn"
-onclick="closeModal()">
-
-閉じる
-
-</button>
-
+<button class="closeBtn" onclick="closeModal()">閉じる</button>
 ${html}
-
 `;
 
 modal.style.display="block";
-
 }
 
 }
-
 
 window.closeModal=function(){
-
 modal.style.display="none";
-
 }
-
 
 /* Firebase */
 
 onSnapshot(collection(db,"categories"),s=>{
-
 categories=s.docs.map(d=>d.data());
-
 renderCategories();
-
 });
-
 
 onSnapshot(collection(db,"products"),s=>{
-
 products=s.docs.map(d=>d.data());
-
 });
-
 
 </script>
 
 </body>
-
 </html>
