@@ -15,22 +15,24 @@ min-height:100vh;
 position:relative;
 overflow-x:hidden;
 
-/* ネオン夜空 */
+/* 背景画像 */
 background:
-radial-gradient(circle at 30% 20%, rgba(180,0,255,.35), transparent 45%),
-radial-gradient(circle at 70% 25%, rgba(0,255,255,.25), transparent 40%),
-linear-gradient(180deg,#14001f 0%,#0b0014 40%,#060010 100%);
+linear-gradient(rgba(10,0,30,.65), rgba(5,0,20,.75)),
+url("images/cybercity.jpg");
+
+background-size:cover;
+background-position:center;
 background-attachment:fixed;
 }
 
 /* ============================= */
-/* ⚡ 稲妻フラッシュ */
+/* ⚡ 稲妻 */
 /* ============================= */
 
 @keyframes lightningFlash{
-0%,97%,100%{background-color:transparent;}
-98%{background-color:rgba(255,255,255,.12);}
-99%{background-color:rgba(255,255,255,.28);}
+0%,97%,100%{filter:brightness(1);}
+98%{filter:brightness(1.4);}
+99%{filter:brightness(1.8);}
 }
 
 body{
@@ -46,7 +48,7 @@ content:"";
 position:fixed;
 inset:-20%;
 pointer-events:none;
-z-index:-3;
+z-index:-1;
 
 background:
 repeating-linear-gradient(
@@ -55,18 +57,11 @@ rgba(255,255,255,.25) 0px,
 rgba(255,255,255,.25) 2px,
 transparent 3px,
 transparent 15px
-),
-repeating-linear-gradient(
-100deg,
-rgba(255,0,200,.12) 0px,
-rgba(255,0,200,.12) 1px,
-transparent 2px,
-transparent 20px
 );
 
-animation:rain 0.8s linear infinite;
+animation:rain 0.7s linear infinite;
 mix-blend-mode:screen;
-opacity:.8;
+opacity:.9;
 }
 
 @keyframes rain{
@@ -75,14 +70,8 @@ opacity:.8;
 }
 
 /* ============================= */
-/* 🌆 都市 + 💡窓チラつき + 🌊反射 */
+/* 🌊 水面反射強調 */
 /* ============================= */
-
-@keyframes windowFlicker{
-0%{opacity:.96;}
-50%{opacity:.86;}
-100%{opacity:.98;}
-}
 
 body::after{
 content:"";
@@ -90,126 +79,43 @@ position:fixed;
 bottom:0;
 left:0;
 width:100%;
-height:65%;
+height:45%;
 pointer-events:none;
-z-index:-2;
+z-index:-1;
 
 background:
-
-/* 下部に濃い影（都市の土台） */
 linear-gradient(to top,
-rgba(0,0,0,.95) 0%,
-rgba(0,0,0,.85) 40%,
-transparent 100%
-),
-
-/* ビルの塊（縦の黒い帯） */
-linear-gradient(
-90deg,
-transparent 0%,
-rgba(0,0,0,.85) 5%,
-transparent 10%,
-transparent 18%,
-rgba(0,0,0,.8) 20%,
-transparent 28%,
-rgba(0,0,0,.9) 35%,
-transparent 45%,
-rgba(0,0,0,.85) 50%,
-transparent 60%,
-rgba(0,0,0,.8) 65%,
-transparent 75%,
-rgba(0,0,0,.9) 80%,
-transparent 90%
-),
-
-/* 窓（ピンク） */
-repeating-linear-gradient(
-0deg,
-transparent 0px,
-transparent 8px,
-rgba(255,0,255,.22) 8px,
-rgba(255,0,255,.22) 10px
-),
-
-/* 窓（シアン） */
-repeating-linear-gradient(
-90deg,
-transparent 0px,
-transparent 12px,
-rgba(0,255,255,.18) 12px,
-rgba(0,255,255,.18) 14px
+rgba(255,0,255,.25),
+rgba(0,255,255,.15),
+transparent
 );
 
-background-repeat:no-repeat;
-filter:blur(0.6px);
-opacity:.95;
-
-/* 🌊 水面反射っぽい内側の光 */
-box-shadow:
-0 30px 80px rgba(255,0,255,.20) inset,
-0 60px 120px rgba(0,255,255,.14) inset;
-
-animation:windowFlicker 3s infinite alternate;
+mix-blend-mode:screen;
+opacity:.5;
 }
 
 /* ============================= */
-/* 🚁 ドローン（CSSだけだと表示要素が無いので擬似的な光影のみ） */
-/* ※HTMLを触らない条件のため、背景側に「通過する光」を追加 */
+/* 🚁 ドローン光 */
 /* ============================= */
 
-@keyframes droneGlow{
-0%{transform:translateX(-20%) translateY(0); opacity:0;}
-10%{opacity:.55;}
-50%{transform:translateX(50%) translateY(-10px); opacity:.65;}
-90%{opacity:.55;}
-100%{transform:translateX(120%) translateY(0); opacity:0;}
+@keyframes droneMove{
+0%{transform:translateX(-10%) translateY(0);}
+50%{transform:translateX(50%) translateY(-10px);}
+100%{transform:translateX(110%) translateY(0);}
 }
 
-body{
-/* ドローン光を背景に合成 */
-background-image:
-radial-gradient(circle at 30% 20%, rgba(180,0,255,.35), transparent 45%),
-radial-gradient(circle at 70% 25%, rgba(0,255,255,.25), transparent 40%),
-linear-gradient(180deg,#14001f 0%,#0b0014 40%,#060010 100%);
-}
-
-/* ドローンの光（もう1枚レイヤー） */
-body{
---droneX:0;
-}
-
-body::before{
-/* 既存の雨に追加で “移動する光の筋” を混ぜる */
-background:
-repeating-linear-gradient(
-100deg,
-rgba(255,255,255,.25) 0px,
-rgba(255,255,255,.25) 2px,
-transparent 3px,
-transparent 15px
-),
-repeating-linear-gradient(
-100deg,
-rgba(255,0,200,.12) 0px,
-rgba(255,0,200,.12) 1px,
-transparent 2px,
-transparent 20px
-),
-radial-gradient(circle at var(--droneX) 28%, rgba(255,0,255,.22), transparent 18%),
-radial-gradient(circle at calc(var(--droneX) + 6%) 29%, rgba(0,255,255,.18), transparent 16%);
-}
-
-/* ドローン位置を動かす（CSS変数をtransformで擬似的に移動） */
-@keyframes droneVar{
-0%{--droneX:-10%;}
-50%{--droneX:50%;}
-100%{--droneX:110%;}
-}
-
-body{
-animation:
-lightningFlash 8s infinite,
-droneVar 16s linear infinite;
+.drone{
+position:fixed;
+top:20%;
+left:-10%;
+width:70px;
+height:18px;
+background:linear-gradient(90deg,#ff00ff,#00ffff);
+border-radius:20px;
+box-shadow:0 0 20px #ff00ff,0 0 40px #00ffff;
+animation:droneMove 18s linear infinite;
+opacity:.7;
+z-index:5;
 }
 
 /* ============================= */
@@ -252,12 +158,8 @@ display:flex;
 gap:20px;
 }
 
-/* ============================= */
-/* PANEL */
-/* ============================= */
-
 .panel{
-background:rgba(20,0,40,.75);
+background:rgba(20,0,40,.7);
 border-radius:14px;
 padding:16px;
 border:1px solid #ff00ff33;
@@ -271,24 +173,16 @@ border:1px solid #ff00ff;
 box-shadow:0 0 25px #ff00ff33;
 }
 
-/* ============================= */
-/* WIDTH */
-/* ============================= */
-
 .categories{width:230px;}
 .products{width:420px;}
 .detail{flex:1;}
-
-/* ============================= */
-/* CATEGORY */
-/* ============================= */
 
 .categoryBtn{
 padding:10px 14px;
 margin:6px 0;
 cursor:pointer;
 border-radius:10px;
-background:rgba(0,0,0,.4);
+background:rgba(0,0,0,.5);
 border:1px solid #ff00ff33;
 display:flex;
 align-items:center;
@@ -310,10 +204,6 @@ border-radius:6px;
 object-fit:cover;
 }
 
-/* ============================= */
-/* SEARCH */
-/* ============================= */
-
 #searchBox{
 width:100%;
 padding:10px;
@@ -330,10 +220,6 @@ border:1px solid #ff00ff;
 box-shadow:0 0 12px #ff00ff55;
 }
 
-/* ============================= */
-/* CARD */
-/* ============================= */
-
 .card{
 display:flex;
 gap:12px;
@@ -341,7 +227,7 @@ padding:12px;
 margin-bottom:12px;
 cursor:pointer;
 border-radius:12px;
-background:rgba(0,0,0,.5);
+background:rgba(0,0,0,.6);
 border:1px solid #ff00ff33;
 transition:.2s;
 }
@@ -364,16 +250,6 @@ font-size:16px;
 font-weight:700;
 }
 
-.desc{
-white-space:pre-line;
-line-height:1.7;
-opacity:.9;
-}
-
-/* ============================= */
-/* MODAL */
-/* ============================= */
-
 .modal{
 position:fixed;
 top:0;
@@ -393,10 +269,6 @@ height:420px;
 margin-top:20px;
 border:none;
 }
-
-/* ============================= */
-/* SCROLL */
-/* ============================= */
 
 ::-webkit-scrollbar{
 width:8px;
@@ -418,7 +290,6 @@ flex-direction:column;
 margin-top:70px;
 }
 
-/* 既存レイアウト維持 */
 .categories,
 .products{
 width:100%;
@@ -432,7 +303,7 @@ display:none;
 height:250px;
 }
 
-/* ✅ ここが要望：スマホだけカテゴリ横スクロール */
+/* スマホだけカテゴリ横スクロール */
 .categories{
 overflow-x:auto;
 overflow-y:hidden;
@@ -448,32 +319,7 @@ gap:12px;
 .categoryBtn{
 flex:0 0 auto;
 min-width:160px;
-margin:0; /* 縦並びの余白を横並び用に最適化（スマホのみ） */
+margin:0;
 }
 
-.categories::-webkit-scrollbar{
-height:8px;
-}
-
-.categories::-webkit-scrollbar-thumb{
-background:#ff00ff;
-border-radius:10px;
-}
-
-}
-
-/* ============================= */
-/* REDUCE MOTION */
-/* ============================= */
-
-@media (prefers-reduced-motion: reduce){
-body::before{
-animation:none;
-}
-body{
-animation:none;
-}
-body::after{
-animation:none;
-}
 }
