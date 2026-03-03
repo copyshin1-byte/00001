@@ -1,4 +1,6 @@
-/* ===== RESET ===== */
+/* ============================= */
+/* RESET */
+/* ============================= */
 
 *{
 box-sizing:border-box;
@@ -13,131 +15,177 @@ min-height:100vh;
 position:relative;
 overflow-x:hidden;
 
-/* サイバー夜空 */
+/* ネオン夜空 */
 background:
-radial-gradient(circle at 20% 15%, rgba(120,0,255,.25), transparent 45%),
-radial-gradient(circle at 80% 20%, rgba(0,255,255,.18), transparent 40%),
-linear-gradient(180deg,#03040a 0%,#020312 45%,#01010a 100%);
+radial-gradient(circle at 30% 20%, rgba(180,0,255,.35), transparent 45%),
+radial-gradient(circle at 70% 25%, rgba(0,255,255,.25), transparent 40%),
+linear-gradient(180deg,#14001f 0%,#0b0014 40%,#060010 100%);
 background-attachment:fixed;
 }
 
-/* ===== 雨レイヤー ===== */
+/* ============================= */
+/* ⚡ 稲妻フラッシュ */
+/* ============================= */
+
+@keyframes lightningFlash{
+0%,97%,100%{background-color:transparent;}
+98%{background-color:rgba(255,255,255,.15);}
+99%{background-color:rgba(255,255,255,.35);}
+}
+
+body{
+animation:lightningFlash 8s infinite;
+}
+
+/* ============================= */
+/* 🌧 雨 */
+/* ============================= */
 
 body::before{
 content:"";
 position:fixed;
 inset:-20%;
 pointer-events:none;
-z-index:-2;
-mix-blend-mode:screen;
+z-index:-3;
 
 background:
 repeating-linear-gradient(
-115deg,
-rgba(120,255,255,.20) 0px,
-rgba(120,255,255,.20) 1px,
-transparent 2px,
-transparent 10px
-),
-repeating-linear-gradient(
-112deg,
-rgba(255,80,255,.15) 0px,
-rgba(255,80,255,.15) 1px,
-transparent 2px,
-transparent 16px
+100deg,
+rgba(255,255,255,.25) 0px,
+rgba(255,255,255,.25) 2px,
+transparent 3px,
+transparent 15px
 );
 
-animation:rainFall 1.2s linear infinite;
-opacity:.9;
+animation:rain 0.8s linear infinite;
+mix-blend-mode:screen;
+opacity:.8;
 }
 
-/* ===== 都市シルエット ===== */
+@keyframes rain{
+0%{transform:translateY(-10%);}
+100%{transform:translateY(10%);}
+}
+
+/* ============================= */
+/* 🌆 都市 */
+/* ============================= */
 
 body::after{
 content:"";
 position:fixed;
-inset:0;
+bottom:0;
+left:0;
+width:100%;
+height:65%;
 pointer-events:none;
-z-index:-1;
+z-index:-2;
 
 background:
 
-/* 窓の光 */
+linear-gradient(to top,
+rgba(0,0,0,.95) 0%,
+rgba(0,0,0,.85) 40%,
+transparent 100%
+),
+
+linear-gradient(
+90deg,
+transparent 0%,
+rgba(0,0,0,.85) 5%,
+transparent 10%,
+transparent 18%,
+rgba(0,0,0,.8) 20%,
+transparent 28%,
+rgba(0,0,0,.9) 35%,
+transparent 45%,
+rgba(0,0,0,.85) 50%,
+transparent 60%,
+rgba(0,0,0,.8) 65%,
+transparent 75%,
+rgba(0,0,0,.9) 80%,
+transparent 90%
+),
+
 repeating-linear-gradient(
 0deg,
 transparent 0px,
-transparent 10px,
-rgba(255,200,0,.12) 10px,
-rgba(255,200,0,.12) 11px
+transparent 8px,
+rgba(255,0,255,.25) 8px,
+rgba(255,0,255,.25) 10px
 ),
 repeating-linear-gradient(
 90deg,
 transparent 0px,
-transparent 14px,
-rgba(0,255,255,.10) 14px,
-rgba(0,255,255,.10) 15px
-),
-
-/* ビル影 */
-linear-gradient(180deg,
-transparent 0%,
-transparent 60%,
-rgba(0,0,0,.75) 60%,
-rgba(0,0,0,.9) 100%
-),
-linear-gradient(90deg,
-transparent 0%,
-transparent 8%,
-rgba(0,0,0,.8) 8%,
-rgba(0,0,0,.8) 15%,
-transparent 15%,
-transparent 25%,
-rgba(0,0,0,.75) 25%,
-rgba(0,0,0,.75) 35%,
-transparent 35%,
-transparent 50%,
-rgba(0,0,0,.85) 50%,
-rgba(0,0,0,.85) 60%,
-transparent 60%,
-transparent 75%,
-rgba(0,0,0,.8) 75%,
-rgba(0,0,0,.8) 85%,
-transparent 85%
+transparent 12px,
+rgba(0,255,255,.2) 12px,
+rgba(0,255,255,.2) 14px
 );
 
-background-size:
-100% 260px,
-100% 260px,
-100% 100%,
-100% 100%;
-
-background-position:
-0 100%,
-0 100%,
-0 0,
-0 0;
-
 background-repeat:no-repeat;
-
-filter:blur(.6px);
-animation:cityMove 12s ease-in-out infinite;
+filter:blur(0.6px);
 opacity:.95;
+
+animation:windowFlicker 3s infinite alternate;
 }
 
-/* ===== アニメーション ===== */
+/* 💡 窓チラつき */
 
-@keyframes rainFall{
-0%{transform:translateY(-5%);}
-100%{transform:translateY(5%);}
+@keyframes windowFlicker{
+0%{opacity:.95;}
+50%{opacity:.85;}
+100%{opacity:.98;}
 }
 
-@keyframes cityMove{
-0%{transform:translateX(0);}
-50%{transform:translateX(-1.5%);}
-100%{transform:translateX(0);}
+/* ============================= */
+/* 🌊 水面反射 */
+/* ============================= */
+
+body::selection{background:transparent;}
+
+body::after{
+box-shadow:
+0 30px 80px rgba(255,0,255,.2) inset,
+0 60px 120px rgba(0,255,255,.15) inset;
 }
 
-/* ===== Header ===== */
+/* ============================= */
+/* 🚁 ドローン */
+/* ============================= */
+
+@keyframes droneMove{
+0%{transform:translateX(-10%) translateY(0);}
+50%{transform:translateX(50%) translateY(-10px);}
+100%{transform:translateX(110%) translateY(0);}
+}
+
+body::before{
+background-blend-mode:screen;
+}
+
+/* ドローン本体 */
+
+body::after{
+position:fixed;
+}
+
+.drone{
+position:fixed;
+top:25%;
+left:-10%;
+width:60px;
+height:20px;
+background:linear-gradient(90deg,#ff00ff,#00ffff);
+border-radius:20px;
+box-shadow:0 0 20px #ff00ff,0 0 40px #00ffff;
+z-index:-1;
+animation:droneMove 20s linear infinite;
+opacity:.8;
+}
+
+/* ============================= */
+/* HEADER */
+/* ============================= */
 
 .header{
 position:fixed;
@@ -148,9 +196,9 @@ height:65px;
 display:flex;
 align-items:center;
 justify-content:center;
-background:linear-gradient(#05080c,#000);
-border-bottom:1px solid #ff00ff55;
-box-shadow:0 0 20px #ff00ff33;
+background:linear-gradient(#0a0015,#000);
+border-bottom:1px solid #ff00ff66;
+box-shadow:0 0 25px #ff00ff33;
 z-index:100;
 }
 
@@ -158,11 +206,14 @@ z-index:100;
 font-size:22px;
 font-weight:700;
 letter-spacing:4px;
-color:#ff00ff;
-text-shadow:0 0 6px #ff00ffaa;
+background:linear-gradient(90deg,#ff00ff,#00ffff);
+-webkit-background-clip:text;
+color:transparent;
 }
 
-/* ===== Layout ===== */
+/* ============================= */
+/* LAYOUT */
+/* ============================= */
 
 .container{
 max-width:1400px;
@@ -172,14 +223,13 @@ display:flex;
 gap:20px;
 }
 
-/* ===== Panels ===== */
-
 .panel{
-background:rgba(10,10,30,.85);
-border-radius:12px;
+background:rgba(20,0,40,.75);
+border-radius:14px;
 padding:16px;
 border:1px solid #ff00ff33;
 box-shadow:0 0 20px #000;
+backdrop-filter:blur(6px);
 transition:.2s;
 }
 
@@ -188,20 +238,16 @@ border:1px solid #ff00ff;
 box-shadow:0 0 25px #ff00ff33;
 }
 
-/* ===== Width ===== */
-
 .categories{width:230px;}
 .products{width:420px;}
 .detail{flex:1;}
-
-/* ===== Category Button ===== */
 
 .categoryBtn{
 padding:10px 14px;
 margin:6px 0;
 cursor:pointer;
-border-radius:8px;
-background:#0a0a20;
+border-radius:10px;
+background:rgba(0,0,0,.4);
 border:1px solid #ff00ff33;
 display:flex;
 align-items:center;
@@ -212,7 +258,7 @@ transition:.2s;
 .categoryBtn:hover{
 border:1px solid #ff00ff;
 box-shadow:0 0 15px #ff00ff55;
-transform:translateY(-1px);
+transform:translateY(-2px);
 }
 
 .categoryBtn img{
@@ -222,23 +268,21 @@ border-radius:6px;
 object-fit:cover;
 }
 
-/* ===== Product Card ===== */
-
 .card{
 display:flex;
 gap:12px;
 padding:12px;
 margin-bottom:12px;
 cursor:pointer;
-border-radius:10px;
-background:linear-gradient(#0b0b20,#050510);
+border-radius:12px;
+background:rgba(0,0,0,.5);
 border:1px solid #ff00ff33;
 transition:.2s;
 }
 
 .card:hover{
 border:1px solid #ff00ff;
-box-shadow:0 0 20px #ff00ff44;
+box-shadow:0 0 20px #ff00ff55;
 transform:translateY(-2px);
 }
 
@@ -253,14 +297,6 @@ object-fit:cover;
 font-size:16px;
 font-weight:700;
 }
-
-.desc{
-white-space:pre-line;
-line-height:1.7;
-opacity:.9;
-}
-
-/* ===== Modal ===== */
 
 .modal{
 position:fixed;
@@ -282,8 +318,6 @@ margin-top:20px;
 border:none;
 }
 
-/* ===== Scrollbar ===== */
-
 ::-webkit-scrollbar{
 width:8px;
 }
@@ -292,8 +326,6 @@ width:8px;
 background:#ff00ff;
 border-radius:10px;
 }
-
-/* ===== Mobile ===== */
 
 @media(max-width:700px){
 
@@ -317,11 +349,8 @@ height:250px;
 
 }
 
-/* ===== Reduce Motion ===== */
-
 @media (prefers-reduced-motion: reduce){
-body::before,
-body::after{
+body::before{
 animation:none;
 }
 }
