@@ -217,9 +217,9 @@ border:1px solid #ff00ff33;
 
 display:flex;
 align-items:center;
-gap:10px;
+gap:8px;
 
-padding:12px;
+padding:10px;
 
 transition:.2s;
 
@@ -237,14 +237,14 @@ box-shadow:
 
 
 
-/* カテゴリアイコン */
+/* ✅ カテゴリアイコン小さく */
 
 .categoryBtn img{
 
-width:40px;
-height:40px;
+width:28px;
+height:28px;
 
-border-radius:10px;
+border-radius:6px;
 
 object-fit:cover;
 
@@ -405,17 +405,20 @@ min-height:500px;
 
 
 
-/* 詳細画像 */
+/* ✅ 説明画像はみ出し防止 */
 
 .detail img{
 
-width:100%;
+max-width:100%;
+height:auto;
+
+display:block;
+
+margin-top:15px;
 
 border-radius:12px;
 
 border:1px solid #ff00ff66;
-
-margin-top:15px;
 
 }
 
@@ -471,7 +474,8 @@ z-index:9999;
 
 .modal img{
 
-width:100%;
+max-width:100%;
+height:auto;
 
 margin-top:20px;
 
